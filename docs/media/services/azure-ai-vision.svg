@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg">
+	<g>
+		<path fill="#FFFFFF" d="M.59 4.891a.563.563 0 0 1-.563-.563V.563A.563.563 0 0 1 .59 0h3.525a.563.563 0 0 1 0 1.126H1.153v3.2a.563.563 0 0 1-.563.565Zm17.383-.563V.563A.564.564 0 0 0 17.41 0h-3.525a.563.563 0 1 0 0 1.126h2.962v3.2a.563.563 0 0 0 1.126 0ZM4.678 17.437a.563.563 0 0 0-.563-.563H1.153v-3.2a.563.563 0 0 0-1.126 0v3.765A.563.563 0 0 0 .59 18h3.525a.563.563 0 0 0 .563-.563Zm13.295 0v-3.765a.563.563 0 0 0-1.126 0v3.2h-2.962a.563.563 0 0 0 0 1.126h3.525a.564.564 0 0 0 .563-.561Z"></path>
+		<circle cx="8.765" cy="8.946" r="7.154" fill="#FFFFFF"></circle>
+		<circle cx="8.765" cy="9.083" r="6.182" fill="#28a745"></circle>
+		<circle cx="8.765" cy="8.98" r="5.047" fill="#FFFFFF"></circle>
+		<circle cx="8.765" cy="9.014" r="3.355" fill="#28a745"></circle>
+		<circle cx="7.661" cy="7.778" r="1.008" fill="#FFFFFF"></circle>
+		<circle cx="8.765" cy="9.048" r=".447" fill="#FFFFFF"></circle>
+	</g>
+</svg>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 17 17" class="" role="presentation" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <path fill="#FFFFFF" d="M1 2a1 1 0 011-1h13a1 1 0 011 1v13a1 1 0 01-1 1H2a1 1 0 01-1-1V2z"></path>
+    <path fill-rule="evenodd" d="M9 8V1H8v7H1v1h7v7h1V9h7V8H9z" clip-rule="evenodd" fill="#c107ff"></path>
+    <path fill-rule="evenodd" d="M4 13V4h1v9H4z" clip-rule="evenodd" fill="#c107ff"></path>
+    <path fill-rule="evenodd" d="M4.396 5.104l.708-.708 7.5 7.5-.707.708-7.5-7.5z" clip-rule="evenodd" fill="#c107ff"></path>
+    <path fill-rule="evenodd" d="M13 5H5V4h8v1z" clip-rule="evenodd" fill="#c107ff"></path>
+    <circle cx="4.5" cy="4.5" r="2.5" fill="#c107ff"></circle>
+    <circle cx="12.5" cy="4.5" r="1.5" fill="#c107ff"></circle>
+    <circle cx="4.5" cy="12.5" r="1.5" fill="#c107ff"></circle>
+    <circle cx="12.5" cy="12.5" r="1.5" fill="#c107ff"></circle>
+  </g>
+</svg>
