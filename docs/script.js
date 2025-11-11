@@ -121,7 +121,7 @@ function createTemplateCard(template, isFeatured = false) {
     // Determine thumbnail URL with category-specific defaults
     let thumbnailUrl;
     if (template.thumbnail) {
-        thumbnailUrl = `https://raw.githubusercontent.com/vieiraae/spec2cloud-templates/main/templates/${template.id}/${template.thumbnail}`;
+        thumbnailUrl = `https://raw.githubusercontent.com/Azure-Samples/Spec2Cloud/main/templates/${template.id}/${template.thumbnail}`;
     } else {
         // Use category-specific default thumbnails
         const categoryDefaults = {
@@ -133,7 +133,7 @@ function createTemplateCard(template, isFeatured = false) {
     }
     
     const hasVideo = template.video && template.video !== '';
-    const videoUrl = hasVideo ? `https://raw.githubusercontent.com/vieiraae/spec2cloud-templates/main/templates/${template.id}/${template.video}` : '';
+    const videoUrl = hasVideo ? `https://raw.githubusercontent.com/Azure-Samples/Spec2Cloud/main/templates/${template.id}/${template.video}` : '';
     const vscodeUrl = `vscode://yourpublisher.spec2cloud/command/spec2cloud.createProject?${encodeURIComponent(JSON.stringify({ template: template.id }))}`;
     
     // Format last commit date
@@ -182,7 +182,7 @@ function createTemplateCard(template, isFeatured = false) {
                     ${hasOverflow ? `<span class="icon-badge overflow-badge" onclick='openTemplateModal(${JSON.stringify(template).replace(/'/g, "&#39;")})' title="View all">...</span>` : ''}
                 </div>
                 <div class="template-actions">
-                    <a href="https://github.com/vieiraae/spec2cloud-templates/tree/main/templates/${template.id}" 
+                    <a href="https://github.com/Azure-Samples/Spec2Cloud/tree/main/templates/${template.id}" 
                        target="_blank" 
                        class="btn-secondary">
                         View on GitHub
@@ -373,7 +373,7 @@ function openTemplateModal(template) {
     // Determine thumbnail URL with category-specific defaults
     let thumbnailUrl;
     if (template.thumbnail) {
-        thumbnailUrl = `https://raw.githubusercontent.com/vieiraae/spec2cloud-templates/main/templates/${template.id}/${template.thumbnail}`;
+        thumbnailUrl = `https://raw.githubusercontent.com/Azure-Samples/Spec2Cloud/main/templates/${template.id}/${template.thumbnail}`;
     } else {
         // Use category-specific default thumbnails
         const categoryDefaults = {
@@ -446,7 +446,7 @@ function openTemplateModal(template) {
                 </div>
                 ` : ''}
                 <div class="modal-actions">
-                    <a href="https://github.com/vieiraae/spec2cloud-templates/tree/main/templates/${template.id}" 
+                    <a href="https://github.com/Azure-Samples/Spec2Cloud/tree/main/templates/${template.id}" 
                        target="_blank" 
                        class="btn-secondary">
                         View on GitHub
