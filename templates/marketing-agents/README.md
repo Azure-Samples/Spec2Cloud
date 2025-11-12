@@ -10,8 +10,8 @@ languages: [.NET] # .NET | Python | Java | Go | TypeSscript | JavaScript
 frameworks: [Microsoft Agent Framework, Aspire] # Microsoft Agent Framework | Aspire | LangChain | Pydantic AI
 tags: [] # Labels used to categorize the template
 thumbnail: # (optional) Image with 16:9 aspect ratio: 1280 × 720 (HD), 1920 × 1080 (Full HD)
-video: # (optional) Consider adding a video to showcase the template usage
-version: marketing-agents.mp4 # (optional) Semantic versioning. Consider using a CHANGELOG.md with the version details 
+video: marketing-agents.mp4 # (optional) Consider adding a video to showcase the template usage
+version: # (optional) Semantic versioning. Consider using a CHANGELOG.md with the version details 
 ---
 
 ## [Open Template](repo)
