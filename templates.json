@@ -1,2 +1,28 @@
-{    
+{
+  "marketing-agents": {
+    "title": "Marketing Agents",
+    "description": "A web application for marketing experts to generate and manage comprehensive marketing campaigns using AI Agents.",
+    "repo": "https://github.com/EmeaAppGbb/marketing-agents",
+    "authors": [
+      "kostapetan"
+    ],
+    "category": "AI Apps & Agents",
+    "industry": "Cross Industries",
+    "services": [
+      "Azure AI Foundry",
+      "Azure Cosmos DB"
+    ],
+    "languages": [
+      ".NET"
+    ],
+    "frameworks": [
+      "Microsoft Agent Framework",
+      "Aspire"
+    ],
+    "tags": [],
+    "thumbnail": null,
+    "video": null,
+    "version": "marketing-agents.mp4",
+    "last-commit-date": "2025-11-12 10:51:22 +0000"
+  }
 }
