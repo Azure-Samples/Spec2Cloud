@@ -188,17 +188,29 @@ function createTemplateCard(template, isFeatured = false) {
                     ${hasOverflow ? `<span class="icon-badge overflow-badge" onclick='openTemplateModal(${JSON.stringify(template).replace(/'/g, "&#39;")})' title="View all">...</span>` : ''}
                 </div>
                 <div class="template-actions">
-                    <a href="${template.repo}" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       class="btn-secondary">
-                        View on GitHub
-                    </a>
+                    <div class="github-actions">
+                        <a href="${template.repo}" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="btn-secondary btn-with-icon">
+                            <img src="media/services/github.svg" alt="GitHub" class="btn-icon-img">
+                            View on GitHub
+                        </a>
+                        <a href="${template.repo}/stargazers" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="btn-icon-only"
+                           title="Star this repository">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/>
+                            </svg>
+                        </a>
+                    </div>
                     <div class="use-in-dropdown">
                         <button class="btn-primary dropdown-toggle" onclick="toggleDropdown(event, '${template.id}')">
                             Use in
                             <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style="margin-left: 4px;">
-                                <path d="M2 4l4 4 4-4z"/>
+                                <path d="M2 8l4-4 4 4z"/>
                             </svg>
                         </button>
                         <div class="dropdown-menu" id="dropdown-${template.id}">
@@ -208,10 +220,21 @@ function createTemplateCard(template, isFeatured = false) {
                                     <div class="dropdown-item-title">Open in VS Code</div>
                                     <div class="dropdown-item-description">Download the Spec Template to your local Workspace</div>
                                 </a>
-                                <a href="#" onclick="copyCloneCommand('${template.repo}'); return false;" class="dropdown-item">
-                                    <div class="dropdown-item-title">Clone the Spec Template</div>
-                                    <div class="dropdown-item-description">Run the following command in a terminal: git clone ${template.repo}</div>
-                                </a>
+                                <div class="dropdown-item clone-item">
+                                    <div>
+                                        <div class="dropdown-item-title">Clone the Spec Template</div>
+                                        <div class="dropdown-item-description">Run the following command in a terminal:</div>
+                                        <div class="clone-command">
+                                            <code>git clone ${template.repo}</code>
+                                            <button class="copy-button" onclick="copyCloneCommand('${template.repo}'); event.stopPropagation();" title="Copy to clipboard">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                                    <path d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2z"/>
+                                                    <path d="M2 6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-2H6a3 3 0 0 1-3-3V6H2z"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="dropdown-category">
                                 <div class="dropdown-category-title">Browser</div>
@@ -494,17 +517,29 @@ function openTemplateModal(template) {
                 </div>
                 ` : ''}
                 <div class="modal-actions">
-                    <a href="${template.repo}" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       class="btn-secondary">
-                        View on GitHub
-                    </a>
+                    <div class="github-actions">
+                        <a href="${template.repo}" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="btn-secondary btn-with-icon">
+                            <img src="media/services/github.svg" alt="GitHub" class="btn-icon-img">
+                            View on GitHub
+                        </a>
+                        <a href="${template.repo}/stargazers" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="btn-icon-only"
+                           title="Star this repository">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/>
+                            </svg>
+                        </a>
+                    </div>
                     <div class="use-in-dropdown">
                         <button class="btn-primary dropdown-toggle" onclick="toggleDropdown(event, 'modal-${template.id}')">
                             Use in
                             <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style="margin-left: 4px;">
-                                <path d="M2 4l4 4 4-4z"/>
+                                <path d="M2 8l4-4 4 4z"/>
                             </svg>
                         </button>
                         <div class="dropdown-menu" id="dropdown-modal-${template.id}">
@@ -514,10 +549,21 @@ function openTemplateModal(template) {
                                     <div class="dropdown-item-title">Open in VS Code</div>
                                     <div class="dropdown-item-description">Download the Spec Template to your local Workspace</div>
                                 </a>
-                                <a href="#" onclick="copyCloneCommand('${template.repo}'); return false;" class="dropdown-item">
-                                    <div class="dropdown-item-title">Clone the Spec Template</div>
-                                    <div class="dropdown-item-description">Run the following command in a terminal: git clone ${template.repo}</div>
-                                </a>
+                                <div class="dropdown-item clone-item">
+                                    <div>
+                                        <div class="dropdown-item-title">Clone the Spec Template</div>
+                                        <div class="dropdown-item-description">Run the following command in a terminal:</div>
+                                        <div class="clone-command">
+                                            <code>git clone ${template.repo}</code>
+                                            <button class="copy-button" onclick="copyCloneCommand('${template.repo}'); event.stopPropagation();" title="Copy to clipboard">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                                    <path d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2z"/>
+                                                    <path d="M2 6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-2H6a3 3 0 0 1-3-3V6H2z"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="dropdown-category">
                                 <div class="dropdown-category-title">Browser</div>

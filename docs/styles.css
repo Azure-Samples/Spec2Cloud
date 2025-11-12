@@ -176,6 +176,64 @@ body {
     background-color: var(--bg-secondary);
 }
 
+/* Button with icon styles */
+.github-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.btn-with-icon {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-icon-img {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* Light mode - black icon */
+[data-theme="light"] .btn-icon-img {
+    filter: brightness(0);
+}
+
+/* Dark mode - white icon */
+[data-theme="dark"] .btn-icon-img {
+    filter: brightness(0) invert(1);
+}
+
+.btn-icon-only {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 36px;
+    height: 36px;
+}
+
+.btn-icon-only:hover {
+    background-color: var(--bg-tertiary);
+    transform: translateY(-1px);
+}
+
+.btn-icon-only svg {
+    fill: var(--text-primary);
+}
+
+.btn-icon-only:hover svg {
+    fill: #f1c40f;
+}
+
 /* Dropdown styles */
 .use-in-dropdown {
     position: relative;
@@ -255,6 +313,59 @@ body {
     font-size: 0.75rem;
     color: var(--text-secondary);
     line-height: 1.4;
+}
+
+/* Clone command styles */
+.clone-item {
+    cursor: default;
+}
+
+.clone-item:hover {
+    background-color: transparent;
+}
+
+.clone-command {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+.clone-command code {
+    flex: 1;
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    word-break: break-all;
+    background: transparent;
+    padding: 0;
+}
+
+.copy-button {
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.copy-button:hover {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.copy-button:active {
+    transform: scale(0.95);
 }
 
 /* Notification styles */
@@ -848,6 +959,13 @@ body {
     display: flex;
     gap: var(--spacing-sm);
     margin-top: auto;
+    flex-wrap: wrap;
+}
+
+.template-actions .github-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex: 1;
 }
 
 .template-actions .btn-primary,
@@ -856,6 +974,12 @@ body {
     font-size: 0.75rem;
     padding: 0.5rem 0.65rem;
     white-space: nowrap;
+}
+
+.template-actions .btn-icon-only {
+    flex: 0;
+    font-size: 0.75rem;
+    padding: 0.5rem;
 }
 
 /* Resources Section */
@@ -1090,6 +1214,12 @@ body {
     padding-top: var(--spacing-md);
     margin-top: var(--spacing-sm);
     border-top: 1px solid var(--border-color);
+    flex-wrap: wrap;
+}
+
+.modal-actions .github-actions {
+    display: flex;
+    gap: var(--spacing-xs);
 }
 
 .overflow-badge {
