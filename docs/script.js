@@ -194,9 +194,42 @@ function createTemplateCard(template, isFeatured = false) {
                        class="btn-secondary">
                         View on GitHub
                     </a>
-                    <a href="${vscodeUrl}" class="btn-primary">
-                        Download to VS Code
-                    </a>
+                    <div class="use-in-dropdown">
+                        <button class="btn-primary dropdown-toggle" onclick="toggleDropdown(event, '${template.id}')">
+                            Use in
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style="margin-left: 4px;">
+                                <path d="M2 4l4 4 4-4z"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu" id="dropdown-${template.id}">
+                            <div class="dropdown-category">
+                                <div class="dropdown-category-title">Desktop</div>
+                                <a href="${vscodeUrl}" class="dropdown-item">
+                                    <div class="dropdown-item-title">Open in VS Code</div>
+                                    <div class="dropdown-item-description">Download the Spec Template to your local Workspace</div>
+                                </a>
+                                <a href="#" onclick="copyCloneCommand('${template.repo}'); return false;" class="dropdown-item">
+                                    <div class="dropdown-item-title">Clone the Spec Template</div>
+                                    <div class="dropdown-item-description">Run the following command in a terminal: git clone ${template.repo}</div>
+                                </a>
+                            </div>
+                            <div class="dropdown-category">
+                                <div class="dropdown-category-title">Browser</div>
+                                <a href="https://github.com/codespaces/new?repo=${getRepoPath(template.repo)}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                    <div class="dropdown-item-title">Open in GitHub Codespaces</div>
+                                    <div class="dropdown-item-description">Create a Codespace based on the Spec Template</div>
+                                </a>
+                                <a href="https://vscode.dev/github/${getRepoPath(template.repo)}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                    <div class="dropdown-item-title">Open in VS Code for the Web</div>
+                                    <div class="dropdown-item-description">Open the Spec Template repository</div>
+                                </a>
+                                <a href="https://insiders.vscode.dev/azure?azdTemplateUrl=${encodeURIComponent(template.repo)}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                    <div class="dropdown-item-title">Open in VS Code for Web with Azure</div>
+                                    <div class="dropdown-item-description">Create a new AZD environment in the Azure Cloud Shell</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -467,9 +500,42 @@ function openTemplateModal(template) {
                        class="btn-secondary">
                         View on GitHub
                     </a>
-                    <a href="${vscodeUrl}" class="btn-primary">
-                        Download to VS Code
-                    </a>
+                    <div class="use-in-dropdown">
+                        <button class="btn-primary dropdown-toggle" onclick="toggleDropdown(event, 'modal-${template.id}')">
+                            Use in
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style="margin-left: 4px;">
+                                <path d="M2 4l4 4 4-4z"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu" id="dropdown-modal-${template.id}">
+                            <div class="dropdown-category">
+                                <div class="dropdown-category-title">Desktop</div>
+                                <a href="${vscodeUrl}" class="dropdown-item">
+                                    <div class="dropdown-item-title">Open in VS Code</div>
+                                    <div class="dropdown-item-description">Download the Spec Template to your local Workspace</div>
+                                </a>
+                                <a href="#" onclick="copyCloneCommand('${template.repo}'); return false;" class="dropdown-item">
+                                    <div class="dropdown-item-title">Clone the Spec Template</div>
+                                    <div class="dropdown-item-description">Run the following command in a terminal: git clone ${template.repo}</div>
+                                </a>
+                            </div>
+                            <div class="dropdown-category">
+                                <div class="dropdown-category-title">Browser</div>
+                                <a href="https://github.com/codespaces/new?repo=${getRepoPath(template.repo)}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                    <div class="dropdown-item-title">Open in GitHub Codespaces</div>
+                                    <div class="dropdown-item-description">Create a Codespace based on the Spec Template</div>
+                                </a>
+                                <a href="https://vscode.dev/github/${getRepoPath(template.repo)}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                    <div class="dropdown-item-title">Open in VS Code for the Web</div>
+                                    <div class="dropdown-item-description">Open the Spec Template repository</div>
+                                </a>
+                                <a href="https://insiders.vscode.dev/azure?azdTemplateUrl=${encodeURIComponent(template.repo)}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                    <div class="dropdown-item-title">Open in VS Code for Web with Azure</div>
+                                    <div class="dropdown-item-description">Create a new AZD environment in the Azure Cloud Shell</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -533,4 +599,81 @@ function attachEventListeners() {
             closeVideoModal();
         }
     });
+}
+
+// Dropdown functionality
+function toggleDropdown(event, templateId) {
+    event.stopPropagation();
+    const dropdownId = `dropdown-${templateId}`;
+    const dropdown = document.getElementById(dropdownId);
+    
+    // Close all other dropdowns
+    document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+        if (menu.id !== dropdownId) {
+            menu.classList.remove('show');
+        }
+    });
+    
+    // Toggle current dropdown
+    dropdown.classList.toggle('show');
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('.use-in-dropdown')) {
+        document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+            menu.classList.remove('show');
+        });
+    }
+});
+
+// Helper function to extract repo path from URL
+function getRepoPath(repoUrl) {
+    try {
+        const url = new URL(repoUrl);
+        // Remove leading slash and return org/repo
+        return url.pathname.substring(1);
+    } catch (e) {
+        console.error('Invalid repo URL:', repoUrl);
+        return '';
+    }
+}
+
+// Copy clone command to clipboard
+function copyCloneCommand(repoUrl) {
+    const command = `git clone ${repoUrl}`;
+    navigator.clipboard.writeText(command).then(() => {
+        // Show a temporary notification
+        showNotification('Clone command copied to clipboard!');
+    }).catch(err => {
+        console.error('Failed to copy:', err);
+        showNotification('Failed to copy command', 'error');
+    });
+}
+
+// Show notification
+function showNotification(message, type = 'success') {
+    // Remove any existing notifications
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    // Show notification
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    // Hide and remove notification after 3 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
 }
