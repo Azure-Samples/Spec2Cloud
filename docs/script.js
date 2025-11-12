@@ -127,7 +127,8 @@ function createTemplateCard(template, isFeatured = false) {
         const categoryDefaults = {
             'AI Apps & Agents': 'media/default-aiapps-thumbnail.png',
             'App Modernization': 'media/default-appmod-thumbnail.png',
-            'Data Centric Apps': 'media/default-data-thumbnail.png'
+            'Data Centric Apps': 'media/default-data-thumbnail.png',
+            'Agentic DevOps': 'media/default-devops-thumbnail.png'            
         };
         thumbnailUrl = categoryDefaults[template.category] || 'https://via.placeholder.com/640x360?text=No+Image';
     }
