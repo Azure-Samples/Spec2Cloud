@@ -1,93 +1,28 @@
 {
-  "banking-assistant": {
-    "title": "Intelligent Banking Assistant for Finantial Services",
-    "description": "A banking assistant that delivers personalized financial advice, transaction analysis, and fraud detection!!!",
+  "marketing-agents": {
+    "title": "Marketing Agents",
+    "description": "A web application for marketing experts to generate and manage comprehensive marketing campaigns using AI Agents.",
+    "repo": "https://github.com/EmeaAppGbb/marketing-agents",
+    "authors": [
+      "kostapetan"
+    ],
     "category": "AI Apps & Agents",
-    "industry": "Finantial Services",
+    "industry": "Cross Industries",
     "services": [
       "Azure AI Foundry",
-      "Azure Container Apps",
-      "Azure API Management",
-      "Azure SQL Database",
-      "Azure Monitor",
-      "Azure API Center"
+      "Azure Cosmos DB"
     ],
     "languages": [
-      ".NET",
-      "Python",
-      "TypeScript"
-    ],
-    "frameworks": [
-      "Microsoft Agent Framework"
-    ],
-    "tags": [
-      "MCP",
-      "Microservices"
-    ],
-    "thumbnail": "thumbnail.png",
-    "video": "Spec2Cloud Toolkit.mp4",
-    "version": "1.0",
-    "last-commit-date": "2025-11-11 17:00:59 +0000"
-  },
-  "biometric-security-system": {
-    "title": "Biometric Security System",
-    "description": "An advanced identity verification AI that uses facial recognition, fingerprint analysis, and behavioral biometrics to provide secure access control and threat detection!",
-    "category": "AI Apps & Agents",
-    "industry": "Government & Public Sector",
-    "languages": [
-      "Java"
-    ],
-    "services": [
-      "Azure AI Foundry",
-      "Azure Kubernetes Service"
-    ],
-    "frameworks": [
-      "Microsoft Agent Framework"
-    ],
-    "thumbnail": "thumbnail.png",
-    "video": null,
-    "version": "1.0",
-    "last-commit-date": "2025-11-11 01:07:12 +0000"
-  },
-  "cloud-cost-optimizer": {
-    "title": "Cloud Cost Optimizer",
-    "description": "An intelligent cloud management platform that monitors resource usage, identifies cost savings opportunities, and automatically optimizes cloud infrastructure spending!",
-    "category": "App Modernization",
-    "industry": "Telco & Media",
-    "languages": [
-      "Java"
-    ],
-    "services": [
-      "Azure AI Foundry",
-      "Azure Kubernetes Service"
-    ],
-    "frameworks": [
-      "Microsoft Agent Framework"
-    ],
-    "thumbnail": "thumbnail.png",
-    "video": null,
-    "version": "1.0",
-    "last-commit-date": "2025-11-11 01:07:12 +0000"
-  },
-  "content-moderation-agent": {
-    "title": "Content Moderation Agent",
-    "description": "An AI content moderator that automatically reviews user-generated content, detects harmful material, and ensures platform safety across social media and forums!",
-    "category": "AI Apps & Agents",
-    "industry": "Telco & Media",
-    "services": [
-      "Azure AI Foundry",
-      "Azure Kubernetes Service"
-    ],
-    "languages": [
-      "Java"
+      ".NET"
     ],
     "frameworks": [
       "Microsoft Agent Framework",
-      "LangChain"
+      "Aspire"
     ],
+    "tags": [],
     "thumbnail": null,
     "video": null,
-    "version": "1.0.0",
-    "last-commit-date": "2025-11-11 16:53:00 +0000"
+    "version": "marketing-agents.mp4",
+    "last-commit-date": "2025-11-12 10:51:22 +0000"
   }
 }
