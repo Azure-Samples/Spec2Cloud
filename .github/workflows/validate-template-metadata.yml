@@ -1,0 +1,101 @@
+name: Validate Template Metadata
+
+on:
+  pull_request:
+    paths:
+      - 'templates/**'
+
+jobs:
+  validate-metadata:
+    runs-on: ubuntu-latest
+    name: Check Template README Metadata
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Get changed files in templates folder
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: templates/**/README.md
+          
+      - name: Validate metadata in README files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          EXIT_CODE=0
+          
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "::group::Validating $file"
+            
+            # Skip the _template folder
+            if [[ "$file" == *"/_template/"* ]]; then
+              echo "Skipping template folder: $file"
+              echo "::endgroup::"
+              continue
+            fi
+            
+            # Check if file exists
+            if [ ! -f "$file" ]; then
+              echo "::error file=$file::File not found"
+              EXIT_CODE=1
+              echo "::endgroup::"
+              continue
+            fi
+            
+            # Extract YAML frontmatter
+            FRONTMATTER=$(awk '/^---$/{i++}i==1{print;next}i==2{exit}' "$file")
+            
+            if [ -z "$FRONTMATTER" ]; then
+              echo "::error file=$file::No YAML frontmatter found in README"
+              EXIT_CODE=1
+              echo "::endgroup::"
+              continue
+            fi
+            
+            # Required fields
+            REQUIRED_FIELDS=("title" "description" "repo" "authors" "category" "industry" "services" "languages" "frameworks")
+            
+            for field in "${REQUIRED_FIELDS[@]}"; do
+              # Check if field exists and is not empty/just a comment
+              if ! echo "$FRONTMATTER" | grep -qE "^${field}:\s*\S"; then
+                echo "::error file=$file::Missing or empty required field: $field"
+                EXIT_CODE=1
+              else
+                # Extract the value (handling arrays)
+                VALUE=$(echo "$FRONTMATTER" | grep "^${field}:" | sed "s/^${field}:\s*//")
+                
+                # Check if it's an empty array or just a placeholder comment
+                if [[ "$VALUE" =~ ^\[\]$ ]] || [[ "$VALUE" =~ ^#.* ]] || [ -z "$VALUE" ]; then
+                  echo "::error file=$file::Required field '$field' is empty or not filled in (value: $VALUE)"
+                  EXIT_CODE=1
+                else
+                  echo "✓ Field '$field' is present and filled"
+                fi
+              fi
+            done
+            
+            echo "::endgroup::"
+          done
+          
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo ""
+            echo "❌ Validation failed! Please ensure all required metadata fields are filled in."
+            echo ""
+            echo "Required fields:"
+            echo "  - title"
+            echo "  - description"
+            echo "  - repo"
+            echo "  - authors"
+            echo "  - category"
+            echo "  - industry"
+            echo "  - services"
+            echo "  - languages"
+            echo "  - frameworks"
+            exit 1
+          else
+            echo ""
+            echo "✅ All metadata validations passed!"
+          fi
