@@ -18,7 +18,7 @@ jobs:
       
       - name: Get changed files in templates folder
         id: changed-files
-        uses: tj-actions/changed-files@v44
+        uses: tj-actions/changed-files@v46
         with:
           files: templates/**/README.md
           
