@@ -959,13 +959,20 @@ body {
     display: flex;
     gap: var(--spacing-sm);
     margin-top: auto;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .template-actions .github-actions {
     display: flex;
     gap: var(--spacing-xs);
-    flex: 1;
+    flex: 0 1 auto;
+}
+
+.template-actions .use-in-dropdown {
+    flex: 0 0 auto;
+    margin-left: auto;
 }
 
 .template-actions .btn-primary,
@@ -974,12 +981,21 @@ body {
     font-size: 0.75rem;
     padding: 0.5rem 0.65rem;
     white-space: nowrap;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .template-actions .btn-icon-only {
     flex: 0;
     font-size: 0.75rem;
     padding: 0.5rem;
+    height: 36px;
+}
+
+.template-actions .dropdown-toggle {
+    height: 36px;
 }
 
 /* Resources Section */
@@ -1214,12 +1230,36 @@ body {
     padding-top: var(--spacing-md);
     margin-top: var(--spacing-sm);
     border-top: 1px solid var(--border-color);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .modal-actions .github-actions {
     display: flex;
     gap: var(--spacing-xs);
+    flex: 0 1 auto;
+}
+
+.modal-actions .use-in-dropdown {
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+.modal-actions .btn-primary,
+.modal-actions .btn-secondary {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-actions .btn-icon-only {
+    height: 36px;
+}
+
+.modal-actions .dropdown-toggle {
+    height: 36px;
 }
 
 .overflow-badge {
