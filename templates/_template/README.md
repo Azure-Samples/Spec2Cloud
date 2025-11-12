@@ -4,7 +4,7 @@ description: Description # Summary with 140 chars or less; be extremely concise.
 repo: # GitHub repo URL with the spec template files, including the .github folder. It's recommended to prefix the repo name with "spec2cloud-". As a best practice, add the generated code to a separate branch for sample implementation, and keep only the template on the main branch.
 authors: [] # GitHub handles with the main contributors
 category: AI Apps & Agents # AI Apps & Agents | App Modernization | Data Centric Apps | Agentic DevOps
-industry: Cross Industries # Cross Industries | Finantial Services | Healthcare & Life Sciences | Manufacturing | Retail & Consumer Goods | Government & Public Sector | Education | Energy & Resources | Telco & Media | Mobility & Automotive
+industry: Cross-Industry # Cross-Industry | Finantial Services | Healthcare & Life Sciences | Manufacturing | Retail & Consumer Goods | Government & Public Sector | Education | Energy & Resources | Telco & Media | Mobility & Automotive
 services: [Azure AI Foundry] # Full list here: https://azure.microsoft.com/en-us/products/
 languages: [] # .NET | Python | Java | Go | TypeSscript | JavaScript | BICEP | Terraform
 frameworks: [] # Microsoft Agent Framework | Aspire | LangChain | Pydantic AI
