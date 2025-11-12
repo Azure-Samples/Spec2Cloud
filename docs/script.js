@@ -166,6 +166,12 @@ function createTemplateCard(template, isFeatured = false) {
             <div class="template-content">
                 <h3 class="template-title" onclick='openTemplateModal(${JSON.stringify(template).replace(/'/g, "&#39;")})'>${title}</h3>
                 <p class="template-description">${description}</p>
+                ${template.authors && template.authors.length > 0 ? `
+                <div class="template-authors">
+                    <span class="authors-label">Authors:</span>
+                    ${template.authors.map(author => `<a href="https://github.com/${author}" target="_blank" rel="noopener noreferrer" class="author-link">@${author}</a>`).join(', ')}
+                </div>
+                ` : ''}
                 <div class="template-metadata">
                     ${version ? `<span class="badge version-badge">v${version}</span>` : ''}
                     ${lastCommitDate ? `<span class="template-last-commit">Last updated: ${lastCommitDate}</span>` : ''}
@@ -182,8 +188,9 @@ function createTemplateCard(template, isFeatured = false) {
                     ${hasOverflow ? `<span class="icon-badge overflow-badge" onclick='openTemplateModal(${JSON.stringify(template).replace(/'/g, "&#39;")})' title="View all">...</span>` : ''}
                 </div>
                 <div class="template-actions">
-                    <a href="https://github.com/Azure-Samples/Spec2Cloud/tree/main/templates/${template.id}" 
+                    <a href="${template.repo}" 
                        target="_blank" 
+                       rel="noopener noreferrer"
                        class="btn-secondary">
                         View on GitHub
                     </a>
@@ -413,6 +420,14 @@ function openTemplateModal(template) {
                     <h3>Description</h3>
                     <p>${template.description}</p>
                 </div>
+                ${template.authors && template.authors.length > 0 ? `
+                <div class="modal-section">
+                    <h3>Authors</h3>
+                    <div class="modal-authors">
+                        ${template.authors.map(author => `<a href="https://github.com/${author}" target="_blank" rel="noopener noreferrer" class="author-link">@${author}</a>`).join(' ')}
+                    </div>
+                </div>
+                ` : ''}
                 ${template.services && template.services.length > 0 ? `
                 <div class="modal-section">
                     <h3>Services</h3>
@@ -446,8 +461,9 @@ function openTemplateModal(template) {
                 </div>
                 ` : ''}
                 <div class="modal-actions">
-                    <a href="https://github.com/Azure-Samples/Spec2Cloud/tree/main/templates/${template.id}" 
+                    <a href="${template.repo}" 
                        target="_blank" 
+                       rel="noopener noreferrer"
                        class="btn-secondary">
                         View on GitHub
                     </a>
