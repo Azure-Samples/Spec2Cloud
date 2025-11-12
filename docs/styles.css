@@ -191,7 +191,7 @@ body {
 
 .dropdown-menu {
     position: absolute;
-    top: calc(100% + 4px);
+    bottom: calc(100% + 4px);
     right: 0;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -202,7 +202,7 @@ body {
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
+    transform: translateY(10px);
     transition: all 0.2s ease;
     max-height: 80vh;
     overflow-y: auto;
