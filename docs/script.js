@@ -751,7 +751,7 @@ function showNotification(message, type = 'success') {
 // Share template function
 function shareTemplate(templateId) {
     const baseUrl = window.location.origin + window.location.pathname;
-    const shareUrl = `${baseUrl}?template=${templateId}`;
+    const shareUrl = `https://aka.ms/spec2cloud?template=${templateId}`;
     
     // Try to use native share API if available
     if (navigator.share) {
