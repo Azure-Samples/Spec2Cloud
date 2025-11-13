@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     buildFilterOptions();
     renderGallery();
     attachEventListeners();
+    checkTemplateQueryParameter();
 });
 
 // Load templates.json and featured-templates.json
@@ -214,6 +215,13 @@ function createTemplateCard(template, isFeatured = false) {
                                 <path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/>
                             </svg>
                         </a>
+                        <button class="btn-icon-only"
+                           onclick="shareTemplate('${template.id}')"
+                           title="Share Spec Template">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M13.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM11 2.5a2.5 2.5 0 11.603 1.628l-6.718 3.12a2.499 2.499 0 010 1.504l6.718 3.12a2.5 2.5 0 11-.488.876l-6.718-3.12a2.5 2.5 0 110-3.256l6.718-3.12A2.5 2.5 0 0111 2.5zm-8.5 4a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm11 5.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="use-in-dropdown">
                         <button class="btn-primary dropdown-toggle" onclick="toggleDropdown(event, '${template.id}')">
@@ -543,6 +551,13 @@ function openTemplateModal(template) {
                                 <path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/>
                             </svg>
                         </a>
+                        <button class="btn-icon-only"
+                           onclick="shareTemplate('${template.id}')"
+                           title="Share Spec Template">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M13.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM11 2.5a2.5 2.5 0 11.603 1.628l-6.718 3.12a2.499 2.499 0 010 1.504l6.718 3.12a2.5 2.5 0 11-.488.876l-6.718-3.12a2.5 2.5 0 110-3.256l6.718-3.12A2.5 2.5 0 0111 2.5zm-8.5 4a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm11 5.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="use-in-dropdown">
                         <button class="btn-primary dropdown-toggle" onclick="toggleDropdown(event, 'modal-${template.id}')">
@@ -731,4 +746,49 @@ function showNotification(message, type = 'success') {
             notification.remove();
         }, 300);
     }, 3000);
+}
+
+// Share template function
+function shareTemplate(templateId) {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${baseUrl}?template=${templateId}`;
+    
+    // Try to use native share API if available
+    if (navigator.share) {
+        const template = allTemplates.find(t => t.id === templateId);
+        navigator.share({
+            title: template ? template.title : 'Spec2Cloud Template',
+            text: template ? template.description : 'Check out this Spec Template',
+            url: shareUrl
+        }).catch(err => {
+            console.log('Share cancelled or failed:', err);
+        });
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            showNotification('Template link copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy:', err);
+            showNotification('Failed to copy link', 'error');
+        });
+    }
+}
+
+// Check for template query parameter on page load
+function checkTemplateQueryParameter() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const templateId = urlParams.get('template');
+    
+    if (templateId) {
+        // Find the template
+        const template = allTemplates.find(t => t.id === templateId);
+        if (template) {
+            // Wait a bit for the page to fully render, then open the modal
+            setTimeout(() => {
+                openTemplateModal(template);
+                // Scroll to the template gallery section
+                document.querySelector('.gallery-section')?.scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        }
+    }
 }
