@@ -1084,6 +1084,17 @@ body {
 #video-player {
     max-width: 100%;
     max-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#video-player video,
+#video-player iframe {
+    max-width: 100%;
+    max-height: 80vh;
+    width: 100%;
+    aspect-ratio: 16/9;
 }
 
 /* Template Modal */

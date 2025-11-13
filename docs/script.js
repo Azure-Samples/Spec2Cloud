@@ -127,10 +127,16 @@ function createTemplateCard(template, isFeatured = false) {
     const title = truncateText(template.title, 60);
     const description = truncateText(template.description, 200);
     
-    // Determine thumbnail URL with category-specific defaults
+    // Determine thumbnail URL
     let thumbnailUrl;
     if (template.thumbnail) {
-        thumbnailUrl = `https://raw.githubusercontent.com/Azure-Samples/Spec2Cloud/main/templates/${template.id}/${template.thumbnail}`;
+        // Check if thumbnail is already a URL
+        if (template.thumbnail.startsWith('http://') || template.thumbnail.startsWith('https://')) {
+            thumbnailUrl = template.thumbnail;
+        } else {
+            // Build raw GitHub URL
+            thumbnailUrl = `https://raw.githubusercontent.com/${getRepoPath(template.repo)}/main/${template.thumbnail}`;
+        }
     } else {
         // Use category-specific default thumbnails
         const categoryDefaults = {
@@ -142,8 +148,21 @@ function createTemplateCard(template, isFeatured = false) {
         thumbnailUrl = categoryDefaults[template.category] || 'https://via.placeholder.com/640x360?text=No+Image';
     }
     
+    // Determine video URL
     const hasVideo = template.video && template.video !== '';
-    const videoUrl = hasVideo ? `https://raw.githubusercontent.com/Azure-Samples/Spec2Cloud/main/templates/${template.id}/${template.video}` : '';
+    let videoUrl = '';
+    let isYouTube = false;
+    if (hasVideo) {
+        // Check if video is already a URL
+        if (template.video.startsWith('http://') || template.video.startsWith('https://')) {
+            videoUrl = template.video;
+            // Check if it's a YouTube URL
+            isYouTube = videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be');
+        } else {
+            // Build raw GitHub URL
+            videoUrl = `https://raw.githubusercontent.com/${getRepoPath(template.repo)}/main/${template.video}`;
+        }
+    }
     const vscodeUrl = `vscode://AlexVieira.spec2cloud-toolkit?template=${template.id}`;
     
     // Format last commit date
@@ -166,7 +185,7 @@ function createTemplateCard(template, isFeatured = false) {
             <div class="template-thumbnail">
                 <img src="${thumbnailUrl}" alt="${title}" loading="lazy">
                 ${hasVideo ? `
-                    <button class="video-play-button" onclick="openVideoModal('${videoUrl}')">
+                    <button class="video-play-button" onclick="openVideoModal('${videoUrl}', ${isYouTube})">
                         <svg viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z"/>
                         </svg>
@@ -427,22 +446,45 @@ function sortTemplates(sortBy) {
 }
 
 // Video modal
-function openVideoModal(videoUrl) {
+function openVideoModal(videoUrl, isYouTube = false) {
     const modal = document.getElementById('video-modal');
     const videoPlayer = document.getElementById('video-player');
     
-    videoPlayer.src = videoUrl;
+    if (isYouTube) {
+        // Convert YouTube URL to embed format
+        const embedUrl = getYouTubeEmbedUrl(videoUrl);
+        videoPlayer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    } else {
+        videoPlayer.innerHTML = `<video controls autoplay><source src="${videoUrl}" type="video/mp4"></video>`;
+    }
+    
     modal.style.display = 'flex';
-    // Auto-play the video
-    videoPlayer.play();
+}
+
+function getYouTubeEmbedUrl(url) {
+    // Extract video ID from various YouTube URL formats
+    let videoId = '';
+    
+    if (url.includes('youtube.com/watch')) {
+        // Format: https://www.youtube.com/watch?v=VIDEO_ID
+        const urlParams = new URLSearchParams(new URL(url).search);
+        videoId = urlParams.get('v');
+    } else if (url.includes('youtu.be/')) {
+        // Format: https://youtu.be/VIDEO_ID
+        videoId = url.split('youtu.be/')[1].split('?')[0];
+    } else if (url.includes('youtube.com/embed/')) {
+        // Already in embed format
+        return url;
+    }
+    
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
 }
 
 function closeVideoModal() {
     const modal = document.getElementById('video-modal');
     const videoPlayer = document.getElementById('video-player');
     
-    videoPlayer.pause();
-    videoPlayer.src = '';
+    videoPlayer.innerHTML = '';
     modal.style.display = 'none';
 }
 
@@ -453,7 +495,11 @@ function openTemplateModal(template) {
     // Determine thumbnail URL with category-specific defaults
     let thumbnailUrl;
     if (template.thumbnail) {
-        thumbnailUrl = `https://raw.githubusercontent.com/Azure-Samples/Spec2Cloud/main/templates/${template.id}/${template.thumbnail}`;
+        if (template.thumbnail.startsWith('http://') || template.thumbnail.startsWith('https://')) {
+            thumbnailUrl = template.thumbnail;
+        } else {
+            thumbnailUrl = `https://raw.githubusercontent.com/${getRepoPath(template.repo)}/main/${template.thumbnail}`;
+        }
     } else {
         // Use category-specific default thumbnails
         const categoryDefaults = {
