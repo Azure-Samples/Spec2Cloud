@@ -135,7 +135,7 @@ function createTemplateCard(template, isFeatured = false) {
     
     const hasVideo = template.video && template.video !== '';
     const videoUrl = hasVideo ? `https://raw.githubusercontent.com/Azure-Samples/Spec2Cloud/main/templates/${template.id}/${template.video}` : '';
-    const vscodeUrl = `vscode://AlexVieira.spec2cloud-toolkit?template=${encodeURIComponent(JSON.stringify({ template: template.id }))}`;
+    const vscodeUrl = `vscode://AlexVieira.spec2cloud-toolkit?template=${template.id}`;
     
     // Format last commit date
     const lastCommitDate = template['last-commit-date'] ? formatDate(template['last-commit-date']) : '';
@@ -451,7 +451,7 @@ function openTemplateModal(template) {
     const lastCommitDate = template['last-commit-date'] ? formatDate(template['last-commit-date']) : '';
     const version = template.version || '';
     
-    const vscodeUrl = `vscode://AlexVieira.spec2cloud-toolkit?template=${encodeURIComponent(JSON.stringify({ template: template.id }))}`;
+    const vscodeUrl = `vscode://AlexVieira.spec2cloud-toolkit?template=${template.id}`;
     
     modalContent.innerHTML = `
         <div class="modal-header">
