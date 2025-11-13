@@ -9,8 +9,8 @@ services: [Azure AI Foundry, Azure Cosmos DB] # Full list here: https://azure.mi
 languages: [.NET] # .NET | Python | Java | Go | TypeSscript | JavaScript
 frameworks: [Microsoft Agent Framework, Aspire] # Microsoft Agent Framework | Aspire | LangChain | Pydantic AI
 tags: [playwright] # Labels used to categorize the template
-thumbnail: thumbnail.png # (optional) Image with 16:9 aspect ratio: 1280 × 720 (HD), 1920 × 1080 (Full HD)
-video: marketing-agents.mp4 # (optional) Consider adding a video to showcase the template usage
+thumbnail: # (optional) Full URL or relative path to the spec template repo with an image with 16:9 aspect ratio: 1280 × 720 (HD), 1920 × 1080 (Full HD)
+video: # (optional) Full URL or relative path to the spec template repo with a video to showcase the template usage
 version: 0.1 # (optional) Semantic versioning. Consider using a CHANGELOG.md with the version details 
 ---
 

@@ -9,7 +9,7 @@ services: [Azure AI Foundry] # Full list here: https://azure.microsoft.com/en-us
 languages: [] # .NET | Python | Java | Go | TypeSscript | JavaScript | BICEP | Terraform
 frameworks: [] # Microsoft Agent Framework | Aspire | LangChain | Pydantic AI
 tags: [] # Labels used to categorize the template
-thumbnail: # (optional) Image with 16:9 aspect ratio: 1280 × 720 (HD), 1920 × 1080 (Full HD)
-video: # (optional) Consider adding a video to showcase the template usage
+thumbnail: # (optional) Full URL or relative path to the spec template repo with an image with 16:9 aspect ratio: 1280 × 720 (HD), 1920 × 1080 (Full HD)
+video: # (optional) Full URL or relative path to the spec template repo with a video to showcase the template usage
 version: # (optional) Semantic versioning. Consider using a CHANGELOG.md with the version details 
 ---
