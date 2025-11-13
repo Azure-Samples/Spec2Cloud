@@ -54,10 +54,18 @@ function toggleTheme() {
 
 // Render featured templates
 function renderFeaturedTemplates() {
+    const featuredSection = document.querySelector('.featured-section');
     const featuredGrid = document.getElementById('featured-grid');
     const featuredTemplates = allTemplates.filter(t => featuredTemplateIds.includes(t.id));
 
-    featuredGrid.innerHTML = featuredTemplates.map(template => createTemplateCard(template, true)).join('');
+    if (featuredTemplates.length === 0) {
+        // Hide the entire featured section if no featured templates
+        featuredSection.style.display = 'none';
+    } else {
+        // Show the section and render templates
+        featuredSection.style.display = 'block';
+        featuredGrid.innerHTML = featuredTemplates.map(template => createTemplateCard(template, true)).join('');
+    }
 }
 
 // Build filter options dynamically
