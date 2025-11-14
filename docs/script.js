@@ -163,7 +163,7 @@ function createTemplateCard(template, isFeatured = false) {
             videoUrl = `https://raw.githubusercontent.com/${getRepoPath(template.repo)}/main/${template.video}`;
         }
     }
-    const vscodeUrl = `vscode://AlexVieira.spec2cloud-toolkit?template=${template.id}`;
+    const vscodeUrl = `vscode://ms-gbb-tools.spec2cloud-toolkit?template=${template.id}`;
     
     // Format last commit date
     const lastCommitDate = template['last-commit-date'] ? formatDate(template['last-commit-date']) : '';
@@ -260,7 +260,7 @@ function createTemplateCard(template, isFeatured = false) {
                                 <div class="dropdown-category-title">Desktop</div>
                                 <a href="${vscodeUrl}" class="dropdown-item" data-vscode-url="${vscodeUrl}" data-insiders-url="${vscodeUrl.replace('vscode://', 'vscode-insiders://')}">
                                     <div class="dropdown-item-title">Open in VS Code</div>
-                                    <div class="dropdown-item-description">Download the Spec Template to your local Workspace</div>
+                                    <div class="dropdown-item-description">Clone the Spec Template to your local Workspace using the Spec2Cloud extension</div>
                                 </a>
                                 <div class="dropdown-item clone-item">
                                     <div>
@@ -519,7 +519,7 @@ function openTemplateModal(template) {
     const lastCommitDate = template['last-commit-date'] ? formatDate(template['last-commit-date']) : '';
     const version = template.version || '';
     
-    const vscodeUrl = `vscode://AlexVieira.spec2cloud-toolkit?template=${template.id}`;
+    const vscodeUrl = `vscode://ms-gbb-tools.spec2cloud-toolkit?template=${template.id}`;
     
     modalContent.innerHTML = `
         <div class="modal-header">
@@ -623,7 +623,7 @@ function openTemplateModal(template) {
                                 <div class="dropdown-category-title">Desktop</div>
                                 <a href="${vscodeUrl}" class="dropdown-item">
                                     <div class="dropdown-item-title">Open in VS Code</div>
-                                    <div class="dropdown-item-description">Download the Spec Template to your local Workspace</div>
+                                    <div class="dropdown-item-description">Clone the Spec Template to your local Workspace using the Spec2Cloud extension</div>
                                 </a>
                                 <div class="dropdown-item clone-item">
                                     <div>
