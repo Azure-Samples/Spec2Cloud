@@ -272,6 +272,35 @@ body {
     transform: translateY(0);
 }
 
+.dropdown-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.insiders-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.insiders-toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #16a34a;
+}
+
+.insiders-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #16a34a;
+    letter-spacing: 0.3px;
+}
+
 .dropdown-category {
     padding: var(--spacing-sm) 0;
 }

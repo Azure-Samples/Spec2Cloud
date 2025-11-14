@@ -250,9 +250,15 @@ function createTemplateCard(template, isFeatured = false) {
                             </svg>
                         </button>
                         <div class="dropdown-menu" id="dropdown-${template.id}">
+                            <div class="dropdown-header">
+                                <label class="insiders-toggle">
+                                    <input type="checkbox" id="insiders-${template.id}" onchange="toggleInsiders('${template.id}')">
+                                    <span class="insiders-label">Insiders</span>
+                                </label>
+                            </div>
                             <div class="dropdown-category">
                                 <div class="dropdown-category-title">Desktop</div>
-                                <a href="${vscodeUrl}" class="dropdown-item">
+                                <a href="${vscodeUrl}" class="dropdown-item" data-vscode-url="${vscodeUrl}" data-insiders-url="${vscodeUrl.replace('vscode://', 'vscode-insiders://')}">
                                     <div class="dropdown-item-title">Open in VS Code</div>
                                     <div class="dropdown-item-description">Download the Spec Template to your local Workspace</div>
                                 </a>
@@ -278,11 +284,11 @@ function createTemplateCard(template, isFeatured = false) {
                                     <div class="dropdown-item-title">Open in GitHub Codespaces</div>
                                     <div class="dropdown-item-description">Create a Codespace based on the Spec Template</div>
                                 </a>
-                                <a href="https://vscode.dev/github/${getRepoPath(template.repo)}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                <a href="https://vscode.dev/github/${getRepoPath(template.repo)}" class="dropdown-item" target="_blank" rel="noopener noreferrer" data-vscode-url="https://vscode.dev/github/${getRepoPath(template.repo)}" data-insiders-url="https://insiders.vscode.dev/github/${getRepoPath(template.repo)}">
                                     <div class="dropdown-item-title">Open in VS Code for the Web</div>
                                     <div class="dropdown-item-description">Open the Spec Template repository</div>
                                 </a>
-                                <a href="https://insiders.vscode.dev/azure?azdTemplateUrl=${encodeURIComponent(template.repo)}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                <a href="https://vscode.dev/azure?azdTemplateUrl=${encodeURIComponent(template.repo)}" class="dropdown-item" target="_blank" rel="noopener noreferrer" data-vscode-url="https://vscode.dev/azure?azdTemplateUrl=${encodeURIComponent(template.repo)}" data-insiders-url="https://insiders.vscode.dev/azure?azdTemplateUrl=${encodeURIComponent(template.repo)}">
                                     <div class="dropdown-item-title">Open in VS Code for Web with Azure</div>
                                     <div class="dropdown-item-description">Create a new AZD environment in the Azure Cloud Shell</div>
                                 </a>
@@ -732,6 +738,47 @@ function toggleDropdown(event, templateId) {
     
     // Toggle current dropdown
     dropdown.classList.toggle('show');
+}
+
+// Toggle Insiders mode
+function toggleInsiders(templateId) {
+    const checkbox = document.getElementById(`insiders-${templateId}`);
+    const dropdown = document.getElementById(`dropdown-${templateId}`);
+    const isInsiders = checkbox.checked;
+    
+    // Update all dropdown items with VS Code links
+    dropdown.querySelectorAll('.dropdown-item[data-vscode-url]').forEach(item => {
+        const vscodeUrl = item.getAttribute('data-vscode-url');
+        const insidersUrl = item.getAttribute('data-insiders-url');
+        item.href = isInsiders ? insidersUrl : vscodeUrl;
+        
+        // Update the title text for Desktop VS Code option
+        const title = item.querySelector('.dropdown-item-title');
+        if (title && title.textContent.includes('Open in VS Code')) {
+            if (isInsiders) {
+                title.textContent = 'Open in VS Code Insiders';
+            } else {
+                title.textContent = 'Open in VS Code';
+            }
+        }
+        
+        // Update Web titles
+        if (title && title.textContent.includes('VS Code for the Web')) {
+            if (isInsiders) {
+                title.textContent = 'Open in VS Code for the Web (Insiders)';
+            } else {
+                title.textContent = 'Open in VS Code for the Web';
+            }
+        }
+        
+        if (title && title.textContent.includes('VS Code for Web with Azure')) {
+            if (isInsiders) {
+                title.textContent = 'Open in VS Code for Web with Azure (Insiders)';
+            } else {
+                title.textContent = 'Open in VS Code for Web with Azure';
+            }
+        }
+    });
 }
 
 // Close dropdowns when clicking outside
