@@ -1,7 +1,7 @@
 ---
 name: Feature Request
 about: Suggest a new feature or enhancement for the Spec2Cloud catalog
-title: '[FEATURE] '
+title: '[FEATURE] <feature title>'
 labels: 'enhancement'
 assignees: ''
 ---

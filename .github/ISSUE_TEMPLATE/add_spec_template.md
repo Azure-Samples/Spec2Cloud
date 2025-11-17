@@ -1,7 +1,7 @@
 ---
 name: Add Spec Template
 about: Request to add a new Spec Template to the catalog
-title: '[ADD TEMPLATE] '
+title: '[ADD TEMPLATE] <template title>'
 labels: 'add_spec_template'
 assignees: ''
 ---

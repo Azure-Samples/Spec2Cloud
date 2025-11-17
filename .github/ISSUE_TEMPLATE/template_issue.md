@@ -1,7 +1,7 @@
 ---
 name: Template Issue
 about: Report an issue with a specific Spec Template (broken link, outdated info, etc.)
-title: '[TEMPLATE] '
+title: '[TEMPLATE ISSUE] <issue title>'
 labels: 'template_issue'
 assignees: ''
 ---
