@@ -24,7 +24,8 @@ function getRepoPath(repoUrl) {
 function getRepoInfo(repoPath) {
   const info = {
     lastCommitDate: null,
-    stars: 0
+    stars: 0,
+    forks: 0
   };
   
   try {
@@ -38,7 +39,7 @@ function getRepoInfo(repoPath) {
       info.lastCommitDate = commits[0].commit.committer.date;
     }
     
-    // Get repository stars
+    // Get repository stars and forks
     const repoUrl = `https://api.github.com/repos/${repoPath}`;
     const repoResult = execSync(`curl -s -H "Accept: application/vnd.github.v3+json" "${repoUrl}"`, {
       encoding: 'utf-8'
@@ -46,6 +47,9 @@ function getRepoInfo(repoPath) {
     const repoData = JSON.parse(repoResult);
     if (repoData && repoData.stargazers_count !== undefined) {
       info.stars = repoData.stargazers_count;
+    }
+    if (repoData && repoData.forks_count !== undefined) {
+      info.forks = repoData.forks_count;
     }
   } catch (error) {
     console.error(`Error fetching repo info for ${repoPath}:`, error.message);
@@ -148,6 +152,7 @@ async function processTemplates() {
         category: metadata.category,
         industry: metadata.industry,
         stars: repoInfo.stars,
+        forks: repoInfo.forks,
       };
       
       // Add optional fields if present
@@ -177,7 +182,7 @@ async function processTemplates() {
       }
       
       templates[templateId] = template;
-      console.log(`  ✓ Successfully processed ${templateId} (${repoInfo.stars} stars)`);
+      console.log(`  ✓ Successfully processed ${templateId} (${repoInfo.stars} stars, ${repoInfo.forks} forks)`);
       
     } catch (error) {
       console.log(`  ⚠️  Skipping ${repoPath}: ${error.message}`);
