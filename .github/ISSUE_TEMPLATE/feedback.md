@@ -1,7 +1,7 @@
 ---
 name: Feedback
 about: Share your feedback, suggestions, or general comments about Spec2Cloud
-title: '[FEEDBACK] '
+title: '[FEEDBACK] <feedback title>'
 labels: 'feedback'
 assignees: ''
 ---
