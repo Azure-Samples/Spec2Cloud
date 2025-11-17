@@ -1,5 +1,5 @@
 {
-  "marketing-agents": {
+  "emeaappgbb-marketing-agents": {
     "title": "Marketing Agents",
     "description": "A web application for marketing experts to generate and manage comprehensive marketing campaigns using AI Agents.",
     "repo": "https://github.com/EmeaAppGbb/marketing-agents",
@@ -8,6 +8,7 @@
     ],
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
+    "stars": 2,
     "services": [
       "Azure AI Foundry",
       "Azure Cosmos DB"
@@ -24,7 +25,7 @@
     ],
     "thumbnail": "thumbnail.png",
     "video": "https://private-user-images.githubusercontent.com/10728102/496588303-f0529e70-f437-4a14-93bc-4ab5a0450540.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjMwNTYxMjYsIm5iZiI6MTc2MzA1NTgyNiwicGF0aCI6Ii8xMDcyODEwMi80OTY1ODgzMDMtZjA1MjllNzAtZjQzNy00YTE0LTkzYmMtNGFiNWEwNDUwNTQwLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTExMTMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMTEzVDE3NDM0NlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWE5NThiZDM3NDRlZmM1YjZmNTZkMjlhY2E4NTQ5ZGJjY2I1MWY5ODAxNGRiZDdjYjk1MzQxNzIwODg4NDI3Y2MmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.k2xsB4jJ6fgzEi2lIGFy_MMf2M7BHLVNwy9zEQUJXMI",
-    "version": "0.1",
-    "last-commit-date": "2025-11-13 17:45:58 +0000"
+    "version": 0.1,
+    "last-commit-date": "2025-11-17T09:26:36Z"
   }
 }
