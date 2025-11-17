@@ -789,12 +789,25 @@ function toggleInsiders(templateId) {
     });
 }
 
+// Toggle Add dropdown in header
+function toggleAddDropdown(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('add-dropdown-menu');
+    dropdown.classList.toggle('show');
+}
+
 // Close dropdowns when clicking outside
 document.addEventListener('click', function(event) {
     if (!event.target.closest('.use-in-dropdown')) {
         document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
             menu.classList.remove('show');
         });
+    }
+    if (!event.target.closest('.add-dropdown')) {
+        const addDropdown = document.getElementById('add-dropdown-menu');
+        if (addDropdown) {
+            addDropdown.classList.remove('show');
+        }
     }
 });
 

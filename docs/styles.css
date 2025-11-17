@@ -252,6 +252,21 @@ body {
     display: inline-block;
 }
 
+.add-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.add-dropdown .dropdown-menu {
+    top: calc(100% + 4px);
+    bottom: auto;
+    transform: translateY(-10px);
+}
+
+.add-dropdown .dropdown-menu.show {
+    transform: translateY(0);
+}
+
 .dropdown-toggle {
     display: flex;
     align-items: center;
