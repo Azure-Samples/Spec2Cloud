@@ -260,6 +260,8 @@ body {
 .add-dropdown .dropdown-menu {
     top: calc(100% + 4px);
     bottom: auto;
+    right: 0;
+    left: auto;
     transform: translateY(-10px);
 }
 
@@ -1420,5 +1422,24 @@ body {
     .modal-actions a {
         width: 100%;
         text-align: center;
+    }
+
+    /* Hide "View on GitHub" text on mobile, keep icon */
+    .btn-with-icon {
+        padding: 0.5rem;
+        min-width: 36px;
+        justify-content: center;
+    }
+
+    .btn-with-icon .btn-icon-img {
+        margin: 0;
+    }
+
+    .btn-with-icon:not(.btn-icon-only) {
+        font-size: 0;
+    }
+
+    .btn-with-icon .btn-icon-img {
+        font-size: 1rem;
     }
 }
