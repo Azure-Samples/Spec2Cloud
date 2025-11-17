@@ -165,6 +165,9 @@ async function processTemplates() {
       if (metadata.frameworks) {
         template.frameworks = parseArray(metadata.frameworks);
       }
+      if (metadata.extensions) {
+        template.extensions = parseArray(metadata.extensions);
+      }
       if (metadata.tags) {
         template.tags = parseArray(metadata.tags);
       }
