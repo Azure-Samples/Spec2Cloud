@@ -221,6 +221,18 @@ body {
     height: 36px;
 }
 
+.btn-icon-only.btn-with-count {
+    gap: 4px;
+    padding: 0.5rem 0.625rem;
+    min-width: auto;
+}
+
+.btn-icon-only .count {
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+}
+
 .btn-icon-only:hover {
     background-color: var(--bg-tertiary);
     transform: translateY(-1px);
