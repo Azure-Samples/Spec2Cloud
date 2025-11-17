@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📖 Documentation
+    url: https://github.com/Azure-Samples/Spec2Cloud/blob/main/README.md
+    about: View the project documentation and guidelines
