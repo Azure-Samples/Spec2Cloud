@@ -1,3 +1,3 @@
-# SPEC2CLOUD TEMPLATES 
+# SPEC2CLOUD TEMPLATES
 
 - https://github.com/EmeaAppGbb/marketing-agents

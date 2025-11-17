@@ -135,8 +135,9 @@ async function processTemplates() {
       // Get repository info (last commit date and stars)
       const repoInfo = getRepoInfo(repoPath);
       
-      // Generate template ID from repo name
-      const templateId = repoPath.split('/')[1].toLowerCase().replace(/[^a-z0-9-]/g, '-');
+      // Generate template ID from org and repo name (e.g., "orgname-reponame")
+      const [orgName, repoName] = repoPath.split('/');
+      const templateId = `${orgName}-${repoName}`.toLowerCase().replace(/[^a-z0-9-]/g, '-');
       
       // Build template object
       const template = {

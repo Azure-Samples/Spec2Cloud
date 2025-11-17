@@ -34,6 +34,21 @@ jobs:
           
       - name: Process templates and generate JSON
         run: node .github/scripts/process-templates.js
+      
+      - name: Commit and push to main branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add templates.json
+          
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to templates.json on main branch"
+          else
+            git commit -m "Update templates.json [automated]"
+            git push
+            echo "✓ Successfully updated templates.json on main branch"
+          fi
           
       - name: Checkout pages branch
         uses: actions/checkout@v4
