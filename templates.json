@@ -69,7 +69,7 @@
     ],
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
-    "stars": 0,
+    "stars": 2,
     "forks": 0,
     "services": [
       "Azure AI Foundry",
@@ -79,12 +79,15 @@
       ".NET"
     ],
     "frameworks": [
-      "Microsoft Agent Framework | React"
+      "Microsoft Agent Framework",
+      "React"
     ],
     "extensions": [],
-    "tags": [],
+    "tags": [
+      "🌱 Spec Kit"
+    ],
     "thumbnail": "thumbnail.png",
     "version": "1.0.0",
-    "last-commit-date": "2025-11-18T16:02:41Z"
+    "last-commit-date": "2025-11-18T16:33:03Z"
   }
 }
