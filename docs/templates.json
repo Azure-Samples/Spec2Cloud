@@ -30,21 +30,34 @@
     "last-commit-date": "2025-11-17T10:07:51Z"
   },
   "emeaappgbb-spec2cloud-weather-agent": {
-    "title": "Title",
-    "description": "Description",
+    "title": "Weather Agent",
+    "description": "AI App that shows dummy weather information using AI Foundry, Microsoft Agent Framework, MCP tools and Container Apps",
     "repo": "https://github.com/EmeaAppGbb/spec2cloud-weather-agent",
-    "authors": [],
+    "authors": [
+      "vieiraae"
+    ],
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
     "stars": 0,
     "forks": 0,
     "services": [
-      "Azure AI Foundry"
+      "Azure AI Foundry",
+      "Azure Container Apps",
+      "Azure API Management"
     ],
-    "languages": [],
-    "frameworks": [],
+    "languages": [
+      "Python",
+      "TypeSscript"
+    ],
+    "frameworks": [
+      "Microsoft Agent Framework"
+    ],
     "extensions": [],
-    "tags": [],
-    "last-commit-date": "2025-11-18T15:37:18Z"
+    "tags": [
+      "MCP",
+      "AI-Gateway"
+    ],
+    "thumbnail": "architecture.png",
+    "last-commit-date": "2025-11-18T15:53:16Z"
   }
 }
