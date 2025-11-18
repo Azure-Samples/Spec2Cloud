@@ -47,7 +47,7 @@
     ],
     "languages": [
       "Python",
-      "TypeSscript"
+      "TypeScript"
     ],
     "frameworks": [
       "Microsoft Agent Framework"
@@ -58,7 +58,7 @@
       "AI-Gateway"
     ],
     "thumbnail": "architecture.png",
-    "last-commit-date": "2025-11-18T15:53:16Z"
+    "last-commit-date": "2025-11-18T17:21:11Z"
   },
   "renatosgr-specpets": {
     "title": "Octopets - Pet Sitter MarketPlace Platform",
