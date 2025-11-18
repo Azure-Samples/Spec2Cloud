@@ -59,5 +59,32 @@
     ],
     "thumbnail": "architecture.png",
     "last-commit-date": "2025-11-18T15:53:16Z"
+  },
+  "renatosgr-specpets": {
+    "title": "Octopets - Pet Sitter MarketPlace Platform",
+    "description": "A pet sitter marketplace platform that enables pet owners to search for and book pet sitters. Technically follows .NET Aspire orchestration with ASP.NET Core backend, React frontend, and multi-agent AI integration for intelligent recommendations.",
+    "repo": "https://github.com/RenatoSGR/specPets",
+    "authors": [
+      "RenatoSGR"
+    ],
+    "category": "AI Apps & Agents",
+    "industry": "Cross-Industry",
+    "stars": 0,
+    "forks": 0,
+    "services": [
+      "Azure AI Foundry",
+      "Azure Container Apps"
+    ],
+    "languages": [
+      ".NET"
+    ],
+    "frameworks": [
+      "Microsoft Agent Framework | React"
+    ],
+    "extensions": [],
+    "tags": [],
+    "thumbnail": "thumbnail.png",
+    "version": "1.0.0",
+    "last-commit-date": "2025-11-18T16:02:41Z"
   }
 }
