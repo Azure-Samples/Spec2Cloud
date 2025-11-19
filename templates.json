@@ -11,7 +11,7 @@
     "stars": 2,
     "forks": 0,
     "services": [
-      "Azure AI Foundry",
+      "Microsoft Foundry",
       "Azure Cosmos DB"
     ],
     "languages": [
@@ -22,12 +22,11 @@
       "Aspire"
     ],
     "tags": [
-      "playwright"
+      "Playwright"
     ],
     "thumbnail": "thumbnail.png",
-    "video": "https://private-user-images.githubusercontent.com/10728102/496588303-f0529e70-f437-4a14-93bc-4ab5a0450540.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjMwNTYxMjYsIm5iZiI6MTc2MzA1NTgyNiwicGF0aCI6Ii8xMDcyODEwMi80OTY1ODgzMDMtZjA1MjllNzAtZjQzNy00YTE0LTkzYmMtNGFiNWEwNDUwNTQwLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTExMTMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMTEzVDE3NDM0NlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWE5NThiZDM3NDRlZmM1YjZmNTZkMjlhY2E4NTQ5ZGJjY2I1MWY5ODAxNGRiZDdjYjk1MzQxNzIwODg4NDI3Y2MmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.k2xsB4jJ6fgzEi2lIGFy_MMf2M7BHLVNwy9zEQUJXMI",
     "version": 0.1,
-    "last-commit-date": "2025-11-17T10:07:51Z"
+    "last-commit-date": "2025-11-19T11:31:14Z"
   },
   "emeaappgbb-spec2cloud-weather-agent": {
     "title": "Weather Agent",
@@ -41,13 +40,13 @@
     "stars": 0,
     "forks": 0,
     "services": [
-      "Azure AI Foundry",
+      "Microsoft Foundry",
       "Azure Container Apps",
       "Azure API Management"
     ],
     "languages": [
       "Python",
-      "TypeSscript"
+      "TypeScript"
     ],
     "frameworks": [
       "Microsoft Agent Framework"
@@ -58,7 +57,7 @@
       "AI-Gateway"
     ],
     "thumbnail": "architecture.png",
-    "last-commit-date": "2025-11-18T15:53:16Z"
+    "last-commit-date": "2025-11-19T11:30:08Z"
   },
   "renatosgr-specpets": {
     "title": "Octopets - Pet Sitter MarketPlace Platform",
@@ -69,22 +68,26 @@
     ],
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
-    "stars": 0,
+    "stars": 3,
     "forks": 0,
     "services": [
-      "Azure AI Foundry",
+      "Microsoft Foundry",
       "Azure Container Apps"
     ],
     "languages": [
       ".NET"
     ],
     "frameworks": [
-      "Microsoft Agent Framework | React"
+      "Microsoft Agent Framework",
+      "React"
     ],
     "extensions": [],
-    "tags": [],
+    "tags": [
+      "🌱 Spec Kit"
+    ],
     "thumbnail": "thumbnail.png",
+    "video": "https://github.com/RenatoSGR/specPets/raw/refs/heads/main/media/SpecPets.mp4",
     "version": "1.0.0",
-    "last-commit-date": "2025-11-18T16:02:41Z"
+    "last-commit-date": "2025-11-19T12:05:23Z"
   }
 }
