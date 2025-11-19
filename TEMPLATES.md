@@ -1,4 +1,4 @@
-# SPEC2CLOUD TEMPLATES
+# SPEC2CLOUD TEMPLATES 
 
 - https://github.com/EmeaAppGbb/marketing-agents
 - https://github.com/EmeaAppGbb/spec2cloud-weather-agent
