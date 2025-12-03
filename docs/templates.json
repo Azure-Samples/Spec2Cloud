@@ -1,21 +1,36 @@
 {
   "emeaappgbb-spec2cloud-marketing-agents": {
-    "title": "Title",
+    "title": "Marketing agents",
     "description": "Description",
     "repo": "https://github.com/EmeaAppGbb/spec2cloud-marketing-agents",
-    "authors": [],
+    "authors": [
+      "kostapetan"
+    ],
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
     "stars": 0,
     "forks": 0,
     "services": [
-      "Azure AI Foundry"
+      "Microsoft Foundry",
+      "Azure Container Apps",
+      "Azure CosmosDB"
     ],
-    "languages": [],
-    "frameworks": [],
+    "languages": [
+      ".NET",
+      "TypeScript",
+      "Bicep"
+    ],
+    "frameworks": [
+      "Microsoft Agent Framework",
+      "Aspire",
+      "Next.js",
+      "CopilotKit",
+      "AG-UI"
+    ],
     "extensions": [],
     "tags": [],
-    "last-commit-date": "2025-12-03T11:53:00Z"
+    "version": "1.0.0",
+    "last-commit-date": "2025-12-03T17:34:05Z"
   },
   "emeaappgbb-spec2cloud-weather-agent": {
     "title": "Weather Agent",
