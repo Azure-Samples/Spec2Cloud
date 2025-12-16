@@ -8,7 +8,7 @@
     ],
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
-    "stars": 2,
+    "stars": 0,
     "forks": 0,
     "services": [
       "Microsoft Foundry",
@@ -30,7 +30,7 @@
     "extensions": [],
     "tags": [],
     "version": "1.0.0",
-    "last-commit-date": "2025-12-05T11:24:14Z"
+    "last-commit-date": "2025-12-16T20:27:32Z"
   },
   "emeaappgbb-spec2cloud-weather-agent": {
     "title": "Weather Agent",
