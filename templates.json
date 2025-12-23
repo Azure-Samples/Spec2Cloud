@@ -72,8 +72,8 @@
     ],
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
-    "stars": 6,
-    "forks": 2,
+    "stars": 0,
+    "forks": 0,
     "services": [
       "Microsoft Foundry",
       "Azure Container Apps"
@@ -91,7 +91,6 @@
     ],
     "thumbnail": "thumbnail.png",
     "video": "https://github.com/user-attachments/assets/891b2ec6-40e6-4ea3-95ca-e40a9bd2e6a2",
-    "version": "1.0.0",
-    "last-commit-date": "2025-11-19T12:29:38Z"
+    "version": "1.0.0"
   }
 }
