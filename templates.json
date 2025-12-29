@@ -60,8 +60,7 @@
       "MCP",
       "AI-Gateway"
     ],
-    "thumbnail": "architecture.png",
-    "last-commit-date": "2025-11-19T11:30:08Z"
+    "thumbnail": "architecture.png"
   },
   "renatosgr-specpets": {
     "title": "Octopets - Pet Sitter MarketPlace Platform",
@@ -72,8 +71,8 @@
     ],
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
-    "stars": 6,
-    "forks": 2,
+    "stars": 0,
+    "forks": 0,
     "services": [
       "Microsoft Foundry",
       "Azure Container Apps"
