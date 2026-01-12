@@ -16,8 +16,8 @@ function fetchUrl(url) {
 
 // Function to extract repo path from GitHub URL
 function getRepoPath(repoUrl) {
-  // Handle URLs with /tree/branch pattern
-  const matchWithTree = repoUrl.match(/github\.com\/([^\/]+\/[^\/]+)(?:\/tree\/[^\/]+)?/);
+  // Handle URLs with /tree/branch pattern (branch can contain slashes)
+  const matchWithTree = repoUrl.match(/github\.com\/([^\/]+\/[^\/]+)(?:\/tree\/[^\s\)]+)?/);
   if (matchWithTree) {
     return matchWithTree[1].replace(/\.git$/, '');
   }
@@ -27,8 +27,8 @@ function getRepoPath(repoUrl) {
 
 // Function to extract branch from GitHub URL, defaults to 'main' if not specified
 function getBranch(repoUrl) {
-  // Match /tree/branch-name pattern
-  const match = repoUrl.match(/github\.com\/[^\/]+\/[^\/]+\/tree\/([^\/\s]+)/);
+  // Match /tree/branch-name pattern (branch can contain slashes like feature/my-feature)
+  const match = repoUrl.match(/github\.com\/[^\/]+\/[^\/]+\/tree\/([^\s\)]+)/);
   return match ? match[1] : 'main';
 }
 
