@@ -93,5 +93,23 @@
     "video": "https://github.com/user-attachments/assets/891b2ec6-40e6-4ea3-95ca-e40a9bd2e6a2",
     "version": "1.0.0",
     "last-commit-date": "2025-11-19T12:29:38Z"
+  },
+  "sjuratov-wikipedia-quiz-app": {
+    "title": "Title",
+    "description": "Description",
+    "repo": "https://github.com/sjuratov/wikipedia-quiz-app/tree/feature/react-fastapi-langgraph-azure-openai",
+    "authors": [],
+    "category": "AI Apps & Agents",
+    "industry": "Cross-Industry",
+    "stars": 0,
+    "forks": 0,
+    "services": [
+      "Azure AI Foundry"
+    ],
+    "languages": [],
+    "frameworks": [],
+    "extensions": [],
+    "tags": [],
+    "last-commit-date": "2025-12-11T13:53:04Z"
   }
 }
