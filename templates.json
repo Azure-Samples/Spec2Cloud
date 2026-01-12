@@ -93,5 +93,39 @@
     "video": "https://github.com/user-attachments/assets/891b2ec6-40e6-4ea3-95ca-e40a9bd2e6a2",
     "version": "1.0.0",
     "last-commit-date": "2025-11-19T12:29:38Z"
+  },
+  "sjuratov-wikipedia-quiz-app": {
+    "title": "Wikipedia Quiz Generator",
+    "description": "AI-powered quiz generator creating custom multiple-choice quizzes from Wikipedia articles",
+    "repo": "https://github.com/sjuratov/wikipedia-quiz-app/tree/feature/react-fastapi-langgraph-azure-openai",
+    "authors": [
+      "sjuratov"
+    ],
+    "category": "AI Apps & Agents",
+    "industry": "Education",
+    "stars": 0,
+    "forks": 0,
+    "services": [
+      "Azure AI Foundry",
+      "Azure OpenAI Service"
+    ],
+    "languages": [
+      "Python",
+      "TypeScript"
+    ],
+    "frameworks": [
+      "LangGraph",
+      "React"
+    ],
+    "tags": [
+      "quiz-generation",
+      "wikipedia",
+      "education",
+      "ai-quiz",
+      "knowledge-testing",
+      "langgraph",
+      "agentic-ai"
+    ],
+    "last-commit-date": "2026-01-07T10:11:55Z"
   }
 }
