@@ -16,12 +16,24 @@ function fetchUrl(url) {
 
 // Function to extract repo path from GitHub URL
 function getRepoPath(repoUrl) {
+  // Handle URLs with /tree/branch pattern
+  const matchWithTree = repoUrl.match(/github\.com\/([^\/]+\/[^\/]+)(?:\/tree\/[^\/]+)?/);
+  if (matchWithTree) {
+    return matchWithTree[1].replace(/\.git$/, '');
+  }
   const match = repoUrl.match(/github\.com\/([^\/]+\/[^\/]+)/);
-  return match ? match[1] : null;
+  return match ? match[1].replace(/\.git$/, '') : null;
+}
+
+// Function to extract branch from GitHub URL, defaults to 'main' if not specified
+function getBranch(repoUrl) {
+  // Match /tree/branch-name pattern
+  const match = repoUrl.match(/github\.com\/[^\/]+\/[^\/]+\/tree\/([^\/\s]+)/);
+  return match ? match[1] : 'main';
 }
 
 // Function to get repository information (last commit date and stars)
-function getRepoInfo(repoPath) {
+function getRepoInfo(repoPath, branch = 'main') {
   const info = {
     lastCommitDate: null,
     stars: 0,
@@ -29,8 +41,8 @@ function getRepoInfo(repoPath) {
   };
   
   try {
-    // Get last commit date
-    const commitsUrl = `https://api.github.com/repos/${repoPath}/commits?per_page=1`;
+    // Get last commit date for the specified branch
+    const commitsUrl = `https://api.github.com/repos/${repoPath}/commits?sha=${branch}&per_page=1`;
     const commitsResult = execSync(`curl -s -H "Accept: application/vnd.github.v3+json" "${commitsUrl}"`, {
       encoding: 'utf-8'
     });
@@ -103,16 +115,17 @@ async function processTemplates() {
   for (const repoUrl of repoUrls) {
     const cleanRepoUrl = repoUrl.replace(/\.git$/, '');
     const repoPath = getRepoPath(cleanRepoUrl);
+    const branch = getBranch(cleanRepoUrl);
     
     if (!repoPath) {
       console.log(`Skipping invalid repo URL: ${repoUrl}`);
       continue;
     }
     
-    console.log(`Processing: ${repoPath}`);
+    console.log(`Processing: ${repoPath} (branch: ${branch})`);
     
-    // Construct raw GitHub URL for SPEC2CLOUD.md
-    const rawUrl = `https://raw.githubusercontent.com/${repoPath}/main/SPEC2CLOUD.md`;
+    // Construct raw GitHub URL for SPEC2CLOUD.md using the specified branch
+    const rawUrl = `https://raw.githubusercontent.com/${repoPath}/${branch}/SPEC2CLOUD.md`;
     
     try {
       // Fetch the SPEC2CLOUD.md content
@@ -136,8 +149,8 @@ async function processTemplates() {
         continue;
       }
       
-      // Get repository info (last commit date and stars)
-      const repoInfo = getRepoInfo(repoPath);
+      // Get repository info (last commit date and stars) for the specified branch
+      const repoInfo = getRepoInfo(repoPath, branch);
       
       // Generate template ID from org and repo name (e.g., "orgname-reponame")
       const [orgName, repoName] = repoPath.split('/');
