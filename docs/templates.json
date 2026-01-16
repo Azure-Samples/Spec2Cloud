@@ -127,5 +127,43 @@
       "agentic-ai"
     ],
     "last-commit-date": "2026-01-07T10:11:55Z"
+  },
+  "emeaappgbb-spec2cloud-call-center-agents": {
+    "title": "Call Center Agents",
+    "description": "Multi-agent AI system for automated call center operations with RAG-powered QnA and intelligent routing.",
+    "repo": "https://github.com/EmeaAppGbb/spec2cloud-call-center-agents",
+    "authors": [
+      "alessandro-avila"
+    ],
+    "category": "AI Apps & Agents",
+    "industry": "Cross-Industry",
+    "stars": 0,
+    "forks": 0,
+    "services": [
+      "Azure AI Foundry",
+      "Azure Cosmos DB",
+      "Qdrant"
+    ],
+    "languages": [
+      ".NET",
+      "TypeScript",
+      "BICEP"
+    ],
+    "frameworks": [
+      "Microsoft Agent Framework",
+      "Aspire"
+    ],
+    "extensions": [],
+    "tags": [
+      "RAG",
+      "Multi-Language",
+      "SignalR",
+      "Next.js",
+      "Playwright"
+    ],
+    "thumbnail": "docs/media/customer-support.png",
+    "video": "docs/media/call-center-demo.mp4",
+    "version": 0.1,
+    "last-commit-date": "2026-01-16T13:03:58Z"
   }
 }
