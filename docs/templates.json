@@ -29,7 +29,8 @@
     ],
     "extensions": [],
     "tags": [],
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "last-commit-date": "2025-12-16T20:27:32Z"
   },
   "emeaappgbb-spec2cloud-weather-agent": {
     "title": "Weather Agent",
@@ -59,7 +60,8 @@
       "MCP",
       "AI-Gateway"
     ],
-    "thumbnail": "architecture.png"
+    "thumbnail": "architecture.png",
+    "last-commit-date": "2026-01-15T09:40:51Z"
   },
   "renatosgr-specpets": {
     "title": "Octopets - Pet Sitter MarketPlace Platform",
@@ -70,8 +72,8 @@
     ],
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
-    "stars": 0,
-    "forks": 0,
+    "stars": 6,
+    "forks": 2,
     "services": [
       "Microsoft Foundry",
       "Azure Container Apps"
@@ -89,7 +91,8 @@
     ],
     "thumbnail": "thumbnail.png",
     "video": "https://github.com/user-attachments/assets/891b2ec6-40e6-4ea3-95ca-e40a9bd2e6a2",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "last-commit-date": "2025-11-19T12:29:38Z"
   },
   "sjuratov-wikipedia-quiz-app": {
     "title": "Wikipedia Quiz Generator",
@@ -122,7 +125,8 @@
       "knowledge-testing",
       "langgraph",
       "agentic-ai"
-    ]
+    ],
+    "last-commit-date": "2026-01-07T10:11:55Z"
   },
   "emeaappgbb-spec2cloud-call-center-agents": {
     "title": "Call Center Agents",
@@ -159,6 +163,7 @@
     ],
     "thumbnail": "docs/media/customer-support.png",
     "video": "docs/media/call-center-demo.mp4",
-    "version": 0.1
+    "version": 0.1,
+    "last-commit-date": "2026-01-16T13:03:58Z"
   }
 }
