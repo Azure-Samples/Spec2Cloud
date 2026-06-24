@@ -28,6 +28,8 @@ Move `azure.yaml` and `infra/` into the workspace root. **Ask** before overwriti
 
 Implement per `./docs/plan.md`, keeping it updated with progress. On resume, re-read `./docs/plan.md` and continue from the next unchecked step.
 
+**Accelerate with parallelism.** When the plan has independent workstreams (e.g. frontend, backend, MCP servers, IaC), delegate them to subagents working in parallel rather than building serially, or run `fleet` mode to fan out and coordinate the work. Keep shared contracts (APIs, env vars, `azure.yaml` service names) consistent across agents, and serialize steps with true dependencies (scaffold and env-var persistence before service code).
+
 Create or update `./docs/implementation.md` to capture the architecture that was actually built and the key implementation details (components, data flow, key decisions, deviations from `plan.md`). Include one or more animated Mermaid `flowchart` diagrams to visualize the runtime architecture and request/data flow.
 
 **Pause if:** a task is unclear, implementation reveals a spec/plan gap, or any error/blocker is hit — report and wait, do not guess.
@@ -36,12 +38,15 @@ Create or update `./docs/implementation.md` to capture the architecture that was
 
 Check the following and fix any gaps before claiming implementation is complete and ready for verify/deploy:
 
+- Check that **AZD_AGENT_SKIP_ACR="false"** in the azd env variables if any container images are built for Azure Container Apps or Azure Kubernetes Service.
 - Check if `./azure.yaml` has service configuration (`host: azure.ai.agent`) for each implemented agent.
 - Check if `./azure.yaml` has service configuration for each MCP server.
 - Check if `./azure.yaml` has service configuration for the frontend.
 - Check if `./azure.yaml` has service configuration for the backend.
 - Check if `./azure.yaml` has services configured with cloud build (`remoteBuild: true`) set for container images. Use docker if the user prefers local build and it's running; otherwise, use ACR cloud build.
 - Check if CORS is configured between frontend and backend for both local and cloud environment (`./infra`).
+- Check that any backend calling a Foundry **hosted agent** targets the agent's **dedicated endpoint**. Obtain it by running `azd ai agent show <agent-name>` and reading the Endpoint protocol and URL, and authenticate with a `DefaultAzureCredential` bearer token (scope `https://ai.azure.com/.default`). Make sure to use the protocol supported by the agent (invocations, responses, etc.).
+- Check that an ACR exists for any container image build: AI-starter azd templates often don't create one. If absent, have `./infra` provision its own registry; container apps need it even though hosted agents use Foundry's remote build.
 
 ## Report
 

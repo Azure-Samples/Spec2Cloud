@@ -17,6 +17,7 @@ The user's prompt is the spec brief. If empty, ask once for it; otherwise do not
 2. Invoke `plan`. For each AZD-template choice and Azure region/SKU, pick the minimal viable option and record the assumption in `./docs/plan.md` and `.azure/deployment-plan.md`.
 3. Invoke `implement`. On scaffold conflicts, prefer merge over overwrite without asking.
 4. Invoke `deploy` and run `azd up`.
+5. Analyze your copilot conversation history and report issues and blockers encontered in each stage and save them in `./docs/spec2cloud-issues.md`, to drive future improvements to the plugin and related skills.
 
 ## Pause if
 
@@ -26,4 +27,4 @@ The user's prompt is the spec brief. If empty, ask once for it; otherwise do not
 
 ## Report
 
-Summarize each stage's output doc, list every assumption made, and hand back the deployed Azure endpoint.
+Summarize each stage's output doc, list every assumption made, and hand back the deployed Azure frontend endpoint.

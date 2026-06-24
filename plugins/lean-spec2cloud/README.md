@@ -46,7 +46,7 @@ Prerequisites for `verify` / `deploy`: `az`, `azd`, and `bicep` CLIs installed; 
 ### One-shot: prompt → deployed endpoint
 
 ```
-copilot -p "/fleet lean:spec2cloud Build a simple stateless AI chat application that allows users to interact with a large language model, using React + Vite with a component library for the frontend and Python with the Microsoft Agent Framework for the backend API, with no data persistence. Deploy both the frontend and backend as Azure Container Apps, host the models on Microsoft Foundry, and enable monitoring. Authentication and private networking are out of scope." --no-ask-user --yolo
+  copilot -p "/fleet lean:spec2cloud Build a simple stateless AI chat application that allows users to interact with a large language model, using React + Vite with a component library for the frontend and Python with the Microsoft Agent Framework for the backend API, with no data persistence. Deploy both the frontend and backend as Azure Container Apps, host the models on Microsoft Foundry, and enable monitoring. Authentication and private networking are out of scope." --no-ask-user --yolo
 ```
 
 Runs all five stages, records assumptions, and returns the deployed URL.
