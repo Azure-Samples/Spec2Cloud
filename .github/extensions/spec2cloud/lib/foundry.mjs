@@ -48,21 +48,88 @@ function projectArmId(vars = {}) {
     return null;
 }
 
-const PORTAL_SECTION = {
-    agents: "agents",
-    deployments: "models",
-    toolboxes: "tools",
-    tools: "tools",
-    skills: "skills",
-    knowledge: "indexes",
-};
+const PORTAL_BASE = "https://ai.azure.com";
 
-/** Best-effort deep link into the new Microsoft Foundry portal. */
-export function foundryPortalUrl(wsid, category) {
-    const base = "https://ai.azure.com";
-    const section = PORTAL_SECTION[category] || "overview";
-    if (!wsid) return `${base}/`;
-    return `${base}/foundryProject/${section}?wsid=${encodeURIComponent(wsid)}`;
+/** Parse a Foundry project ARM id into its components. */
+function parseProjectArm(vars = {}) {
+    const id = projectArmId(vars);
+    if (!id) return null;
+    const m = id.match(
+        /\/subscriptions\/([^/]+)\/resourceGroups\/([^/]+)\/providers\/Microsoft\.CognitiveServices\/accounts\/([^/]+)\/projects\/([^/]+)/i,
+    );
+    if (!m) return null;
+    return { sub: m[1], rg: m[2], account: m[3], project: m[4] };
+}
+
+/**
+ * Encode a subscription GUID the way the new Foundry portal expects: the raw
+ * 16 bytes in big-endian (RFC 4122) order, base64url, padding stripped.
+ * Equivalent to Go `uuid.MarshalBinary()` / Python `uuid.UUID(x).bytes`.
+ */
+function guidToBase64Url(guid) {
+    const hex = (guid || "").replace(/[^0-9a-fA-F]/g, "");
+    if (hex.length !== 32) return null;
+    return Buffer.from(hex, "hex")
+        .toString("base64")
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+}
+
+/**
+ * Build a deep-link generator into the new ("nextgen") Microsoft Foundry portal.
+ *
+ * The portal addresses a project with a compact locator:
+ *   https://ai.azure.com/nextgen/r/{encodedSub},{rg},,{account},{project}/<path>
+ * where `encodedSub` is the base64url of the subscription GUID bytes. Known
+ * per-resource paths:
+ *   - agents:      /build/agents/{name}/build[?version={v}]
+ *   - deployments: /build/models/deployments/{name}/details
+ * Categories without a confirmed nextgen path fall back to the project home so a
+ * link always lands on the right project rather than the portal home page.
+ */
+function makePortalLinker(vars = {}) {
+    const parsed = parseProjectArm(vars);
+    if (!parsed) return () => `${PORTAL_BASE}/`;
+
+    const encSub = guidToBase64Url(parsed.sub) || encodeURIComponent(parsed.sub);
+    const tuple = `${encSub},${encodeURIComponent(parsed.rg)},,${encodeURIComponent(
+        parsed.account,
+    )},${encodeURIComponent(parsed.project)}`;
+    const base = `${PORTAL_BASE}/nextgen/r/${tuple}`;
+
+    return function portal(category, item = {}) {
+        const name = item.name ? encodeURIComponent(item.name) : "";
+        switch (category) {
+            case "agents": {
+                if (!name) return `${base}/build/agents`;
+                const v = item.version
+                    ? `?version=${encodeURIComponent(item.version)}`
+                    : "";
+                return `${base}/build/agents/${name}/build${v}`;
+            }
+            case "deployments":
+                return name
+                    ? `${base}/build/models/deployments/${name}/playground`
+                    : `${base}/build/models/deployments`;
+            case "toolboxes":
+                return name
+                    ? `${base}/build/toolboxes/${name}`
+                    : `${base}/build/toolboxes`;
+            case "tools":
+                return name ? `${base}/build/tools/${name}` : `${base}/build/tools`;
+            case "skills":
+                return name
+                    ? `${base}/build/tools/skills/${name}`
+                    : `${base}/build/tools/skills`;
+            case "knowledge":
+                return name
+                    ? `${base}/build/knowledge/search/c/${name}`
+                    : `${base}/build/knowledge`;
+            default:
+                return `${base}/home`;
+        }
+    };
 }
 
 async function collect(iter, max = 200) {
@@ -139,7 +206,7 @@ export async function listFoundry(vars = {}) {
     }
 
     const wsid = projectArmId(vars);
-    const link = (category) => foundryPortalUrl(wsid, category);
+    const portal = makePortalLinker(vars);
 
     const sections = {};
 
@@ -147,7 +214,10 @@ export async function listFoundry(vars = {}) {
         (await collect(project.agents.list())).map((a) => ({
             name: a.name,
             sub: a.versions?.latest?.kind || a.versions?.latest?.model || "",
-            portal: link("agents"),
+            portal: portal("agents", {
+                name: a.name,
+                version: a.versions?.latest?.version,
+            }),
         })),
     );
 
@@ -157,7 +227,7 @@ export async function listFoundry(vars = {}) {
             sub: d.modelName
                 ? `${d.modelPublisher ? d.modelPublisher + " · " : ""}${d.modelName}`
                 : d.type || "",
-            portal: link("deployments"),
+            portal: portal("deployments", { name: d.name }),
         })),
     );
 
@@ -167,7 +237,7 @@ export async function listFoundry(vars = {}) {
         return toolboxes.map((t) => ({
             name: t.name,
             sub: t.default_version ? `v${t.default_version}` : "",
-            portal: link("toolboxes"),
+            portal: portal("toolboxes", t),
         }));
     });
 
@@ -186,7 +256,7 @@ export async function listFoundry(vars = {}) {
                     tools.push({
                         name: toolLabel(tool),
                         sub: `${tool.type || ""}${tool.type ? " · " : ""}${tb.name}`,
-                        portal: link("tools"),
+                        portal: portal("tools", { name: toolLabel(tool) }),
                     });
                 }
             } catch {
@@ -200,7 +270,7 @@ export async function listFoundry(vars = {}) {
         (await collect(project.beta.skills.list())).map((s) => ({
             name: s.name,
             sub: s.description || "",
-            portal: link("skills"),
+            portal: portal("skills", s),
         })),
     );
 
@@ -208,7 +278,7 @@ export async function listFoundry(vars = {}) {
         (await collect(project.indexes.list())).map((i) => ({
             name: i.name,
             sub: `${i.type || "index"}${i.version ? " · v" + i.version : ""}`,
-            portal: link("knowledge"),
+            portal: portal("knowledge", i),
         })),
     );
 

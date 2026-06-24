@@ -7,6 +7,7 @@
     "dependencies": {
         "@azure/ai-projects": "^2.2.0",
         "@azure/arm-resources": "^5.2.0",
-        "@azure/identity": "^4.5.0"
+        "@azure/identity": "^4.5.0",
+        "mermaid": "^10.9.6"
     }
 }

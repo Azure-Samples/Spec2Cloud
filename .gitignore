@@ -1,1 +1,4 @@
 _serve/
+
+# macOS
+.DS_Store

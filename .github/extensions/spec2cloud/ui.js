@@ -23,7 +23,17 @@ const STAGE_ICONS = {
     running: "↻",
     stopped: `<svg viewBox="0 0 16 16" width="14" height="14"><path fill="currentColor" d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"/></svg>`,
     waiting: "?",
+    skipped: `<svg viewBox="0 0 16 16" width="13" height="13"><path fill="currentColor" d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"/></svg>`,
     pending: "•",
+};
+
+// Human-friendly status labels for the top session pill.
+const STATUS_LABEL = {
+    active: "running",
+    running: "running",
+    waiting: "answer required",
+    stopped: "idle",
+    idle: "idle",
 };
 
 // ---------------------------------------------------------------------------
@@ -43,12 +53,15 @@ function esc(s) {
 }
 
 // ---------------------------------------------------------------------------
-// Minimal markdown renderer (headings, lists, code, links, emphasis, hr, quote)
+// Markdown renderer: headings, lists, GFM tables, fenced code (with mermaid),
+// blockquotes, hr, links and inline emphasis.
 // ---------------------------------------------------------------------------
 function renderMarkdown(src) {
     const lines = src.replace(/\r\n/g, "\n").split("\n");
     let html = "";
     let inCode = false;
+    let codeLang = "";
+    let codeBuf = "";
     let listType = null;
     const closeList = () => {
         if (listType) {
@@ -63,20 +76,81 @@ function renderMarkdown(src) {
             .replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>")
             .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 
-    for (const raw of lines) {
+    const flushCode = () => {
+        if (codeLang.toLowerCase() === "mermaid") {
+            // Mermaid source is rendered client-side; keep it raw (escaped).
+            html += `<div class="mermaid">${esc(codeBuf.replace(/\n$/, ""))}</div>`;
+        } else {
+            const cls = codeLang
+                ? ` class="language-${esc(codeLang)}"`
+                : "";
+            html += `<pre><code${cls}>${esc(codeBuf.replace(/\n$/, ""))}</code></pre>`;
+        }
+        codeBuf = "";
+        codeLang = "";
+    };
+
+    // GFM table: a header row, a delimiter row of ---/:--:, then body rows.
+    const isTableRow = (s) => /\|/.test(s) && /\S/.test(s);
+    const isTableDelim = (s) =>
+        /^\s*\|?\s*:?-{1,}:?\s*(\|\s*:?-{1,}:?\s*)+\|?\s*$/.test(s);
+    const splitRow = (s) =>
+        s
+            .trim()
+            .replace(/^\|/, "")
+            .replace(/\|$/, "")
+            .split("|")
+            .map((c) => c.trim());
+
+    for (let i = 0; i < lines.length; i++) {
+        const raw = lines[i];
         if (/^```/.test(raw)) {
             if (inCode) {
-                html += "</code></pre>";
+                flushCode();
                 inCode = false;
             } else {
                 closeList();
-                html += "<pre><code>";
                 inCode = true;
+                codeLang = raw.replace(/^```/, "").trim().split(/\s+/)[0] || "";
             }
             continue;
         }
         if (inCode) {
-            html += esc(raw) + "\n";
+            codeBuf += raw + "\n";
+            continue;
+        }
+        // GFM table detection (needs the next line to be a delimiter row).
+        if (
+            isTableRow(raw) &&
+            i + 1 < lines.length &&
+            isTableDelim(lines[i + 1])
+        ) {
+            closeList();
+            const headers = splitRow(raw);
+            const aligns = splitRow(lines[i + 1]).map((c) => {
+                const l = c.startsWith(":");
+                const r = c.endsWith(":");
+                return l && r ? "center" : r ? "right" : l ? "left" : "";
+            });
+            let t = "<table><thead><tr>";
+            headers.forEach((h, idx) => {
+                const a = aligns[idx] ? ` style="text-align:${aligns[idx]}"` : "";
+                t += `<th${a}>${inline(h)}</th>`;
+            });
+            t += "</tr></thead><tbody>";
+            i += 2;
+            for (; i < lines.length && isTableRow(lines[i]); i++) {
+                const cells = splitRow(lines[i]);
+                t += "<tr>";
+                headers.forEach((_, idx) => {
+                    const a = aligns[idx] ? ` style="text-align:${aligns[idx]}"` : "";
+                    t += `<td${a}>${inline(cells[idx] ?? "")}</td>`;
+                });
+                t += "</tr>";
+            }
+            i--; // step back; loop will advance
+            t += "</tbody></table>";
+            html += t;
             continue;
         }
         if (/^\s*$/.test(raw)) {
@@ -113,9 +187,55 @@ function renderMarkdown(src) {
             html += `<p>${inline(raw)}</p>`;
         }
     }
-    if (inCode) html += "</code></pre>";
+    if (inCode) flushCode();
     closeList();
     return html;
+}
+
+// ---------------------------------------------------------------------------
+// Mermaid (lazy-initialised; bundle served from the loopback origin)
+// ---------------------------------------------------------------------------
+let mermaidReady = false;
+function initMermaid() {
+    if (mermaidReady || typeof window.mermaid === "undefined") return mermaidReady;
+    const dark =
+        (document.documentElement.getAttribute("data-color-mode") === "dark") ||
+        matchMedia("(prefers-color-scheme: dark)").matches;
+    try {
+        window.mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: "strict",
+            theme: dark ? "dark" : "default",
+            fontFamily:
+                "var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)",
+        });
+        mermaidReady = true;
+    } catch {
+        /* leave un-ready; blocks stay as text */
+    }
+    return mermaidReady;
+}
+
+let mermaidSeq = 0;
+async function renderMermaid(root) {
+    const blocks = root.querySelectorAll(".mermaid:not([data-rendered])");
+    if (!blocks.length || !initMermaid()) return;
+    for (const el of blocks) {
+        const code = el.textContent;
+        el.setAttribute("data-rendered", "1");
+        try {
+            const { svg } = await window.mermaid.render(
+                `mmd-${Date.now()}-${mermaidSeq++}`,
+                code,
+            );
+            el.innerHTML = svg;
+            el.classList.add("mermaid-rendered");
+        } catch (e) {
+            el.innerHTML = `<pre class="mermaid-err">${esc(
+                (e && e.message) || String(e),
+            )}</pre><pre>${esc(code)}</pre>`;
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -352,6 +472,7 @@ async function showDoc(stage, { silent } = {}) {
             return;
         }
         body.innerHTML = `<div class="md">${renderMarkdown(data.content)}</div>`;
+        renderMermaid(body);
     } catch (e) {
         body.innerHTML = `<div class="err">${esc(e.message || e)}</div>`;
     }
@@ -598,7 +719,7 @@ function renderHeader(s) {
     const st = s.session.status || "idle";
     const pill = $("#session-status");
     pill.className = "status-pill " + st;
-    pill.querySelector(".status-label").textContent = st;
+    pill.querySelector(".status-label").textContent = STATUS_LABEL[st] || st;
 }
 
 function renderEnv(s) {
@@ -721,7 +842,9 @@ function stageTip(stage) {
         inner = `<p>Stopped — continue in chat:</p>
             <code class="cmd-copy" data-cmd="${esc(stage.command)}" title="Click to copy">${esc(stage.command)}</code>`;
     } else if (stage.status === "waiting") {
-        inner = `<p>Waiting for your input — answer in the chat to continue.</p>`;
+        inner = `<p>Answer required — respond in the chat to continue.</p>`;
+    } else if (stage.status === "skipped") {
+        inner = `<p>Skipped — a later stage completed without this one. Run <code class="cmd-copy" data-cmd="${esc(stage.command)}" title="Click to copy">${esc(stage.command)}</code> if you still need it.</p>`;
     } else if (stage.status === "running") {
         inner = `<p>Running now…</p>`;
     } else if (stage.status === "completed") {
@@ -741,12 +864,14 @@ function renderPipeline(s) {
     const loop = s.loop;
     // The current (non-completed) stage contributes half a step whether it is
     // running, waiting, or stopped/idle — so the bar never shrinks when a stage
-    // flips from running to stopped.
+    // flips from running to stopped. Skipped stages count as fully passed.
     const active = loop.stages.some((x) =>
         x.status === "running" || x.status === "waiting" || x.status === "stopped",
     );
-    const pct = ((loop.completed + (active ? 0.5 : 0)) / loop.total) * 100;
-    $("#progress-fill").style.width = `${pct}%`;
+    const skipped = loop.stages.filter((x) => x.status === "skipped").length;
+    const pct =
+        ((loop.completed + skipped + (active ? 0.5 : 0)) / loop.total) * 100;
+    $("#progress-fill").style.width = `${Math.min(100, pct)}%`;
 
     const pipe = $("#pipeline");
     pipe.innerHTML = "";
@@ -791,9 +916,35 @@ function render(s) {
     renderEnv(s);
     renderStats(s);
     renderPipeline(s);
+    autoOpenOnStageCompletion(s);
     refreshActiveDetail();
     $("#gen-time").textContent =
         "updated " + new Date(s.generatedAt).toLocaleTimeString();
+}
+
+// When a stage transitions from in-progress to completed, surface its doc
+// automatically in the details panel. Only fires on an observed transition,
+// never on the first render (so opening the cockpit doesn't pop a panel).
+let prevStageStatus = null;
+function autoOpenOnStageCompletion(s) {
+    const stages = s.loop?.stages || [];
+    const cur = {};
+    for (const st of stages) cur[st.id] = st.status;
+    if (prevStageStatus) {
+        let justCompleted = null;
+        for (const st of stages) {
+            const before = prevStageStatus[st.id];
+            if (
+                st.status === "completed" &&
+                before &&
+                before !== "completed"
+            ) {
+                justCompleted = st; // last in pipeline order = most advanced
+            }
+        }
+        if (justCompleted) showDoc(justCompleted.id);
+    }
+    prevStageStatus = cur;
 }
 
 // ---------------------------------------------------------------------------

@@ -120,6 +120,7 @@ function freshAcc() {
         lastTurnStart: 0,
         lastTurnEnd: 0,
         lastIdle: 0,
+        lastShutdown: 0,
         pendingPermissions: new Set(),
         pendingInput: false,
         outputTokens: 0,
@@ -151,6 +152,14 @@ function ingest(acc, e) {
             break;
         case "session.idle":
             if (ts) acc.lastIdle = ts;
+            break;
+        case "session.shutdown":
+            if (ts) acc.lastShutdown = ts;
+            break;
+        case "session.resume":
+            // A resume means the session is live again; the prior shutdown
+            // marker should no longer force an idle reading.
+            acc.lastShutdown = 0;
             break;
         case "assistant.message":
             acc.assistantMessages++;
@@ -234,10 +243,32 @@ export async function readStats(eventsPath) {
     }
 
     const now = Date.now();
+    // Turns are written as tight `turn_end`→`turn_start` pairs (~1ms apart),
+    // and `session.idle` is not always emitted. So a bare `turn_end` does NOT
+    // mean the session stopped — it is almost always immediately followed by
+    // the next turn. We treat a recent `turn_end` as "between turns" (still
+    // active) and only fall back to idle once activity has gone quiet for a
+    // short grace window, or an explicit terminal marker fires.
+    const BETWEEN_TURNS_GRACE_MS = 6000;
+    const lastTerminal = Math.max(acc.lastIdle, acc.lastShutdown);
+    const sinceLastEvent = acc.lastEventTime ? now - acc.lastEventTime : Infinity;
+
     let status = "idle";
-    if (acc.pendingPermissions.size > 0 || acc.pendingInput) status = "waiting";
-    else if (acc.lastTurnStart > acc.lastTurnEnd && acc.lastTurnStart > acc.lastIdle)
+    if (acc.pendingPermissions.size > 0 || acc.pendingInput) {
+        status = "waiting";
+    } else if (lastTerminal > acc.lastTurnStart && lastTerminal > acc.lastTurnEnd) {
+        // An explicit idle/shutdown is the newest signal: the session stopped.
+        status = "idle";
+    } else if (acc.lastTurnStart > acc.lastTurnEnd) {
+        // A turn is in flight (covers long-running tools with no interim events).
         status = "active";
+    } else if (
+        acc.lastTurnEnd > lastTerminal &&
+        sinceLastEvent < BETWEEN_TURNS_GRACE_MS
+    ) {
+        // Last event was a fresh `turn_end`: we are between turns, not stopped.
+        status = "active";
+    }
 
     return {
         status,
@@ -291,8 +322,13 @@ export async function readLoop(repoRoot, sessionStatus, startTime) {
 
     let cursor = startTime || now;
     let currentAssigned = false;
+    // A stage whose doc is missing while a *later* stage's doc exists was
+    // skipped (e.g. deploy ran without verify).
+    const laterExists = stageInfo.map((_, i) =>
+        stageInfo.slice(i + 1).some((s) => s.exists),
+    );
     const stages = stageInfo.map((s, i) => {
-        const prevDone = i === 0 || stageInfo[i - 1].exists;
+        const prevDone = i === 0 || stageInfo[i - 1].exists || laterExists[i - 1];
         let status;
         let elapsedMs = null;
         if (s.exists) {
@@ -300,6 +336,9 @@ export async function readLoop(repoRoot, sessionStatus, startTime) {
             const end = s.mtime ?? cursor;
             elapsedMs = Math.max(0, end - cursor);
             cursor = end;
+        } else if (laterExists[i]) {
+            // Missing doc but a downstream stage completed → this one was skipped.
+            status = "skipped";
         } else if (prevDone && !currentAssigned) {
             currentAssigned = true;
             if (sessionStatus === "waiting") status = "waiting";

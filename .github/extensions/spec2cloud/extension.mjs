@@ -184,6 +184,21 @@ async function handleRequest(req, res, entry) {
             const name = path.basename(pathname);
             return await serveStatic(res, path.join("icons", name), "image/svg+xml; charset=utf-8");
         }
+        if (pathname === "/vendor/mermaid.min.js") {
+            try {
+                const data = await fs.readFile(
+                    path.join(__dirname, "node_modules", "mermaid", "dist", "mermaid.min.js"),
+                );
+                res.writeHead(200, {
+                    "Content-Type": "text/javascript; charset=utf-8",
+                    "Cache-Control": "public, max-age=86400",
+                });
+                return res.end(data);
+            } catch {
+                res.writeHead(404, { "Content-Type": "text/plain" });
+                return res.end("mermaid not installed");
+            }
+        }
 
         if (pathname === "/api/state") {
             return sendJson(res, await buildState());
