@@ -31,7 +31,7 @@ Requires `spec.md`, `plan.md`, `.azure/deployment-plan.md`, `verify.md`. If `spe
     ```
     azd up -e <AZD environment>
     ```
-- After deployment succeeds, gather the deployed endpoint URLs from `azd show -e <AZD environment> -o json`.
+- After deployment succeeds, gather the deployed endpoint URLs from `azd show -e <AZD environment> -o json`. The frontend URL is the primary user-facing endpoint and should be set in the azd environment variables as `FRONTEND_URI`.
 - Post-deploy health: confirm ACA revision is active and provisioned (`az containerapp revision list`), hosted-agents sessions respond with the command `azd ai agent show <agent-name>` to retrieve the agent endpoint and playground URL, then `azd ai agent invoke --agent-endpoint <agent-endpoint> {"input": "<message>"}` to confirm the agent responds as expected, and check the logs by running `azd ai agent monitor <agent-name>`. Report the playground URL for each agent to the user.
 - Repeat the HTTP-based E2E validation with the deployed endpoints and report pass/fail.
 

@@ -1,0 +1,11 @@
+{
+    "name": "spec2cloud-canvas",
+    "private": true,
+    "version": "1.0.0",
+    "type": "module",
+    "description": "Spec2Cloud cockpit canvas extension for Copilot CLI.",
+    "dependencies": {
+        "@azure/arm-resources": "^5.2.0",
+        "@azure/identity": "^4.5.0"
+    }
+}
