@@ -29,24 +29,6 @@ const STAGE_ICONS = {
 // ---------------------------------------------------------------------------
 // Formatting helpers
 // ---------------------------------------------------------------------------
-function fmtDuration(ms) {
-    if (ms == null || !isFinite(ms) || ms < 0) return "—";
-    const s = Math.floor(ms / 1000);
-    const h = Math.floor(s / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    const sec = s % 60;
-    const pad = (n) => String(n).padStart(2, "0");
-    return h > 0 ? `${h}:${pad(m)}:${pad(sec)}` : `${pad(m)}:${pad(sec)}`;
-}
-function fmtShort(ms) {
-    if (ms == null || ms < 0) return "";
-    const s = Math.floor(ms / 1000);
-    if (s < 60) return `${s}s`;
-    const m = Math.floor(s / 60);
-    if (m < 60) return `${m}m ${s % 60}s`;
-    const h = Math.floor(m / 60);
-    return `${h}h ${m % 60}m`;
-}
 function fmtNum(n) {
     if (n == null) return "0";
     if (n >= 1000) return (n / 1000).toFixed(n >= 10000 ? 0 : 1) + "k";
@@ -153,6 +135,7 @@ $("#details-close").addEventListener("click", closeDetails);
 function syncDetailButtons() {
     $("#btn-env")?.classList.toggle("active", detail?.kind === "env");
     $("#btn-rg")?.classList.toggle("active", detail?.kind === "resources");
+    $("#btn-foundry")?.classList.toggle("active", detail?.kind === "foundry");
     $("#btn-session")?.classList.toggle("active", detail?.kind === "session");
     $("#btn-todos")?.classList.toggle("active", detail?.kind === "todos");
     $("#stat-mcp")?.classList.toggle("active", detail?.kind === "stat" && detail.stat === "mcp");
@@ -202,19 +185,27 @@ async function showResources(env, { force } = {}) {
                 (data.cliError ? `<div class="err">${esc(data.cliError)}</div>` : "");
             return;
         }
+        const portalBase = "https://portal.azure.com/#@/resource";
         const rows = (data.resources || [])
-            .map(
-                (x) => `<tr>
-                    <td>${esc(x.name)}</td>
-                    <td><code>${esc((x.type || "").replace(/^Microsoft\./, ""))}</code></td>
+            .map((x) => {
+                const fullType = x.type || "";
+                const portal = x.id ? portalBase + x.id + "/overview" : "";
+                return `<tr>
+                    <td title="${esc(fullType)}">${esc(x.name)}</td>
+                    <td><code title="${esc(fullType)}">${esc(fullType.replace(/^Microsoft\./, ""))}</code></td>
                     <td>${esc(x.location || "")}</td>
                     <td>${
                         x.provisioningState
                             ? `<span class="badge ${x.provisioningState === "Succeeded" ? "" : "gray"}">${esc(x.provisioningState)}</span>`
                             : ""
                     }</td>
-                </tr>`,
-            )
+                    <td class="rg-portal-cell">${
+                        portal
+                            ? `<button class="iconbtn rg-portal" data-uri="${esc(portal)}" title="Open in Azure portal" aria-label="Open ${esc(x.name)} in Azure portal">↗</button>`
+                            : ""
+                    }</td>
+                </tr>`;
+            })
             .join("");
         const head = `<div style="margin-bottom:10px;font-size:12px;color:var(--s2c-muted)">
             <strong>${esc(data.resourceGroup || "")}</strong>
@@ -225,9 +216,84 @@ async function showResources(env, { force } = {}) {
         </div>`;
         body.innerHTML = data.resources?.length
             ? head +
-              `<table><thead><tr><th>Name</th><th>Type</th><th>Location</th><th>State</th></tr></thead><tbody>${rows}</tbody></table>`
+              `<table><thead><tr><th>Name</th><th>Type</th><th>Location</th><th>State</th><th></th></tr></thead><tbody>${rows}</tbody></table>`
             : head + '<div class="hc-empty">No resources in this group yet.</div>';
         $("#rg-refresh")?.addEventListener("click", () => showResources(env, { force: true }));
+        body.querySelectorAll(".rg-portal").forEach((b) =>
+            b.addEventListener("click", (e) => {
+                e.stopPropagation();
+                openExternal(b.dataset.uri);
+            }),
+        );
+    } catch (e) {
+        body.innerHTML = `<div class="err">${esc(e.message || e)}</div>`;
+    }
+}
+
+const FOUNDRY_SECTIONS = [
+    ["agents", "Agents"],
+    ["deployments", "Deployments"],
+    ["toolboxes", "Toolboxes"],
+    ["tools", "Tools"],
+    ["skills", "Skills"],
+    ["knowledge", "Knowledge"],
+];
+
+function foundrySectionHtml(label, section) {
+    if (!section) return "";
+    if (section.error) {
+        return `<div class="fdry-section">
+            <div class="fdry-head">${esc(label)}</div>
+            <div class="fdry-err">${esc(section.error)}</div>
+        </div>`;
+    }
+    const items = section.items || [];
+    const rows = items.length
+        ? items
+              .map(
+                  (it) => `<li class="fdry-item">
+                    <span class="fdry-name" title="${esc(it.name)}">${esc(it.name)}</span>
+                    ${it.sub ? `<span class="fdry-sub" title="${esc(it.sub)}">${esc(it.sub)}</span>` : ""}
+                    ${it.portal ? `<button class="iconbtn fdry-portal" data-uri="${esc(it.portal)}" title="Open in Foundry portal" aria-label="Open ${esc(it.name)} in Foundry portal">↗</button>` : ""}
+                </li>`,
+              )
+              .join("")
+        : `<li class="fdry-empty">None</li>`;
+    return `<div class="fdry-section">
+        <div class="fdry-head">${esc(label)} <span class="fdry-count">${items.length}</span></div>
+        <ul class="fdry-list">${rows}</ul>
+    </div>`;
+}
+
+async function showFoundry(env, { force } = {}) {
+    detail = { kind: "foundry", env };
+    openDetails(`Foundry project · ${env}`);
+    syncDetailButtons();
+    const body = $("#details-body");
+    body.innerHTML = '<div class="loading">Querying the Foundry project…</div>';
+    try {
+        const r = await fetch(`/api/foundry?env=${encodeURIComponent(env)}`);
+        const data = await r.json();
+        if (detail?.kind !== "foundry" || detail.env !== env) return;
+        if (data.error) {
+            body.innerHTML = `<div class="err">${esc(data.error)}</div>`;
+            return;
+        }
+        const head = `<div style="margin-bottom:10px;font-size:12px;color:var(--s2c-muted)">
+            <code title="${esc(data.endpoint || "")}">${esc((data.endpoint || "").replace(/^https?:\/\//, ""))}</code>
+            <button class="iconbtn" id="fdry-refresh" style="float:right;padding:2px 8px">↻ refresh</button>
+        </div>`;
+        const sections = FOUNDRY_SECTIONS.map(([key, label]) =>
+            foundrySectionHtml(label, data.sections?.[key]),
+        ).join("");
+        body.innerHTML = head + `<div class="fdry-grid">${sections}</div>`;
+        $("#fdry-refresh")?.addEventListener("click", () => showFoundry(env, { force: true }));
+        body.querySelectorAll(".fdry-portal").forEach((b) =>
+            b.addEventListener("click", (e) => {
+                e.stopPropagation();
+                openExternal(b.dataset.uri);
+            }),
+        );
     } catch (e) {
         body.innerHTML = `<div class="err">${esc(e.message || e)}</div>`;
     }
@@ -425,34 +491,32 @@ function openExternal(uri) {
     }
 }
 
-function showFrontend(uri) {
-    detail = { kind: "frontend", uri };
-    openDetails(`Frontend · ${selectedEnv || ""}`.trim());
-    syncDetailButtons();
-    const body = $("#details-body");
-    body.innerHTML = `
-        <div class="fe-bar">
-            <code class="fe-url" title="${esc(uri)}">${esc(uri)}</code>
-            <span class="fe-bar-actions">
-                <button class="iconbtn" id="fe-reload" data-tip="Reload">↻</button>
-                <button class="iconbtn" id="fe-open" data-tip="Open in external window">↗</button>
-            </span>
-        </div>
-        <div class="fe-frame-wrap">
-            <iframe class="fe-frame" id="fe-frame" src="${esc(uri)}"
-                referrerpolicy="no-referrer" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
-            <div class="fe-note">If the page stays blank, the site likely blocks embedding — use
-                <a href="#" id="fe-open2">open in an external window</a>.</div>
-        </div>`;
-    $("#fe-open")?.addEventListener("click", () => openExternal(uri));
-    $("#fe-open2")?.addEventListener("click", (e) => {
-        e.preventDefault();
+async function openAppBrowser(uri, btn) {
+    const prev = btn ? btn.textContent : null;
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Opening…";
+    }
+    try {
+        const r = await fetch("/api/open-browser", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: uri, title: `Frontend · ${selectedEnv || ""}`.trim() }),
+        });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok || d.error) throw new Error(d.error || "failed");
+        if (btn) btn.textContent = "Opened ✓";
+    } catch {
+        // Fallback: open in an external window if the in-app browser is unavailable.
         openExternal(uri);
-    });
-    $("#fe-reload")?.addEventListener("click", () => {
-        const f = $("#fe-frame");
-        if (f) f.src = uri;
-    });
+        if (btn) btn.textContent = "Opened ↗";
+    } finally {
+        if (btn)
+            setTimeout(() => {
+                btn.textContent = prev;
+                btn.disabled = false;
+            }, 1500);
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -498,7 +562,6 @@ function renderHeader(s) {
     const pill = $("#session-status");
     pill.className = "status-pill " + st;
     pill.querySelector(".status-label").textContent = st;
-    $("#session-elapsed").textContent = fmtDuration(s.session.elapsedMs);
 }
 
 function renderEnv(s) {
@@ -533,8 +596,12 @@ function renderEnv(s) {
 
     const vars = envs.envs?.[selectedEnv]?.vars || {};
     const rg = vars.AZURE_RESOURCE_GROUP;
-    $("#rg-label").textContent = rg || "resources";
-    $("#btn-rg").dataset.tip = rg ? `Resource group: ${rg}` : "Resource group (not set)";
+    $("#btn-rg").dataset.tip = rg ? `Resources · ${rg}` : "Azure resources (group not set)";
+
+    const hasFoundry = !!(vars.AZURE_AI_FOUNDRY_PROJECT_ID || "").trim();
+    const fbtn = $("#btn-foundry");
+    if (fbtn) fbtn.hidden = !hasFoundry;
+    if (!hasFoundry && detail?.kind === "foundry") closeDetails();
 }
 
 $("#env-select").addEventListener("change", (e) => {
@@ -543,9 +610,11 @@ $("#env-select").addEventListener("change", (e) => {
     renderEnv(STATE);
     if (detail?.kind === "env") showEnvFile(selectedEnv);
     else if (detail?.kind === "resources") showResources(selectedEnv);
+    else if (detail?.kind === "foundry") showFoundry(selectedEnv);
 });
 $("#btn-env").addEventListener("click", () => selectedEnv && showEnvFile(selectedEnv));
 $("#btn-rg").addEventListener("click", () => selectedEnv && showResources(selectedEnv));
+$("#btn-foundry").addEventListener("click", () => selectedEnv && showFoundry(selectedEnv));
 $("#btn-session").addEventListener("click", () => showSession());
 $("#btn-todos").addEventListener("click", () => showTodos());
 $("#stat-mcp").addEventListener("click", () => showStat("mcp"));
@@ -619,7 +688,7 @@ function stageTip(stage) {
     } else if (stage.status === "running") {
         inner = `<p>Running now…</p>`;
     } else if (stage.status === "completed") {
-        inner = `<p>Completed${stage.elapsedMs != null ? " in " + fmtShort(stage.elapsedMs) : ""}. Click to view <code>${esc(stage.file)}</code>.</p>`;
+        inner = `<p>Completed. Click to view <code>${esc(stage.file)}</code>.</p>`;
     } else {
         inner = `<p>Waiting on previous stage.</p>`;
     }
@@ -642,17 +711,10 @@ function renderPipeline(s) {
     for (const stage of loop.stages) {
         const node = el("div", `stage ${stage.status}`);
         node.dataset.stage = stage.id;
-        const meta =
-            stage.status === "pending"
-                ? ""
-                : stage.elapsedMs != null
-                  ? fmtShort(stage.elapsedMs)
-                  : "";
         node.innerHTML =
             `<div class="connector"></div>` +
             `<div class="stage-node">${STAGE_ICONS[stage.status] || "•"}</div>` +
             `<div class="stage-label">${esc(stage.label)}</div>` +
-            `<div class="stage-meta">${esc(meta)}</div>` +
             stageTip(stage);
         node.addEventListener("click", () => showDoc(stage.id));
         pipe.appendChild(node);
@@ -669,7 +731,7 @@ function renderPipeline(s) {
     pipe.querySelectorAll(".fe-preview").forEach((b) =>
         b.addEventListener("click", (e) => {
             e.stopPropagation();
-            showFrontend(b.dataset.uri);
+            openAppBrowser(b.dataset.uri, b);
         }),
     );
     pipe.querySelectorAll(".fe-ext").forEach((b) =>
@@ -710,11 +772,6 @@ function connect() {
     };
 }
 
-// Smoothly advance the elapsed clocks between 2s server pushes.
-setInterval(() => {
-    if (!STATE || STATE.session.status !== "active") return;
-    STATE.session.elapsedMs += 1000;
-    $("#session-elapsed").textContent = fmtDuration(STATE.session.elapsedMs);
-}, 1000);
+// Server pushes state every 2s.
 
 connect();

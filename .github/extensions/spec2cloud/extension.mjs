@@ -23,6 +23,7 @@ import {
     STAGES,
 } from "./lib/state.mjs";
 import { listResources } from "./lib/azure.mjs";
+import { listFoundry } from "./lib/foundry.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const servers = new Map(); // instanceId -> { server, url, clients:Set }
@@ -179,6 +180,10 @@ async function handleRequest(req, res, entry) {
         if (pathname === "/ui.js") {
             return await serveStatic(res, "ui.js", "text/javascript; charset=utf-8");
         }
+        if (pathname.startsWith("/icons/") && pathname.endsWith(".svg")) {
+            const name = path.basename(pathname);
+            return await serveStatic(res, path.join("icons", name), "image/svg+xml; charset=utf-8");
+        }
 
         if (pathname === "/api/state") {
             return sendJson(res, await buildState());
@@ -236,6 +241,15 @@ async function handleRequest(req, res, entry) {
             return sendJson(res, { env, ...result });
         }
 
+        if (pathname === "/api/foundry") {
+            const ws = await readWorkspace();
+            const env = url.searchParams.get("env");
+            if (!env) return sendJson(res, { error: "missing env" }, 400);
+            const ef = await readEnvFile(ws.repoRoot, env);
+            const result = await listFoundry(ef.vars || {});
+            return sendJson(res, { env, ...result });
+        }
+
         if (pathname === "/api/run-command" && req.method === "POST") {
             const body = await readBody(req);
             const command = (body.command || "").trim();
@@ -247,6 +261,27 @@ async function handleRequest(req, res, entry) {
                     ephemeral: true,
                 });
                 return sendJson(res, { ok: true, command });
+            } catch (e) {
+                return sendJson(res, { error: e?.message || String(e) }, 500);
+            }
+        }
+
+        if (pathname === "/api/open-browser" && req.method === "POST") {
+            const body = await readBody(req);
+            const target = (body.url || "").trim();
+            if (!target) return sendJson(res, { error: "missing url" }, 400);
+            if (!SESSION) return sendJson(res, { error: "session unavailable" }, 503);
+            try {
+                await SESSION.rpc.canvas.open({
+                    canvasId: "browser",
+                    instanceId: "spec2cloud-frontend",
+                    input: {
+                        url: target,
+                        title: body.title || "Frontend",
+                        placement: { focus: true },
+                    },
+                });
+                return sendJson(res, { ok: true, url: target });
             } catch (e) {
                 return sendJson(res, { error: e?.message || String(e) }, 500);
             }
