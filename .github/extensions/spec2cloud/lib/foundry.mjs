@@ -5,6 +5,22 @@
 // knowledge (search indexes) inside a Foundry project. Every section is
 // best-effort: a failure in one section never blocks the others.
 
+import { createRequire } from "node:module";
+
+// The forked extension process runs under a custom ESM resolver hook that can
+// fail to resolve bare specifiers from the extension's own node_modules. CJS
+// require() resolution is independent of that hook, so we load the Azure SDKs
+// with createRequire (and fall back to dynamic import) to stay robust.
+const require = createRequire(import.meta.url);
+
+function loadModule(name) {
+    try {
+        return { mod: require(name) };
+    } catch (e) {
+        return { error: e?.message || String(e) };
+    }
+}
+
 const ENDPOINT_VARS = [
     "AZURE_AI_FOUNDRY_PROJECT_ENDPOINT",
     "AZURE_AI_PROJECT_ENDPOINT",
@@ -90,19 +106,29 @@ export async function listFoundry(vars = {}) {
     }
 
     let AIProjectClient;
-    try {
-        ({ AIProjectClient } = await import("@azure/ai-projects"));
-    } catch {
-        return {
-            error:
-                "@azure/ai-projects is not installed in the extension. Run `npm install @azure/ai-projects` in the extension folder.",
-        };
+    {
+        const r = loadModule("@azure/ai-projects");
+        if (r.error) {
+            return {
+                error:
+                    "@azure/ai-projects could not be loaded in the extension (" +
+                    r.error +
+                    "). Run `npm install` in the extension folder.",
+                endpoint,
+            };
+        }
+        AIProjectClient = r.mod.AIProjectClient;
     }
     let AzureCliCredential;
-    try {
-        ({ AzureCliCredential } = await import("@azure/identity"));
-    } catch {
-        return { error: "@azure/identity is not installed in the extension." };
+    {
+        const r = loadModule("@azure/identity");
+        if (r.error) {
+            return {
+                error: "@azure/identity could not be loaded (" + r.error + ").",
+                endpoint,
+            };
+        }
+        AzureCliCredential = r.mod.AzureCliCredential;
     }
 
     let project;

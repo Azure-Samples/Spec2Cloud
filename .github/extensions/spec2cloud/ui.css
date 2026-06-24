@@ -286,6 +286,33 @@ code,
     font-size: 13px;
     line-height: 1.4;
 }
+.rg-head {
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--s2c-muted);
+}
+.rg-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.rg-input {
+    font: inherit;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 7px;
+    border: 1px solid var(--s2c-border);
+    background: var(--s2c-surface);
+    color: var(--s2c-text, var(--text-color-default));
+}
+.rg-input[type="search"] {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.rg-input:focus {
+    outline: none;
+    border-color: var(--s2c-blue);
+}
 .fdry-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));

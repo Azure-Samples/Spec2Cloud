@@ -185,14 +185,56 @@ async function showResources(env, { force } = {}) {
                 (data.cliError ? `<div class="err">${esc(data.cliError)}</div>` : "");
             return;
         }
+        const resources = data.resources || [];
         const portalBase = "https://portal.azure.com/#@/resource";
-        const rows = (data.resources || [])
-            .map((x) => {
-                const fullType = x.type || "";
-                const portal = x.id ? portalBase + x.id + "/overview" : "";
-                return `<tr>
+        const shortType = (t) => (t || "").replace(/^Microsoft\./, "");
+        const types = [...new Set(resources.map((x) => x.type).filter(Boolean))].sort();
+
+        const head = `<div class="rg-head">
+            <strong>${esc(data.resourceGroup || "")}</strong>
+            · <span id="rg-shown">${resources.length}</span>/${resources.length} resources
+            · <span class="badge gray">${esc(data.source || "")}</span>
+            ${data.location ? "· " + esc(data.location) : ""}
+            <button class="iconbtn" id="rg-refresh" style="float:right;padding:2px 8px">↻ refresh</button>
+        </div>
+        <div class="rg-filters">
+            <input id="rg-filter-name" class="rg-input" type="search" placeholder="Filter by name…" autocomplete="off" />
+            <select id="rg-filter-type" class="rg-input">
+                <option value="">All types</option>
+                ${types.map((t) => `<option value="${esc(t)}">${esc(shortType(t))}</option>`).join("")}
+            </select>
+        </div>`;
+
+        if (!resources.length) {
+            body.innerHTML = head + '<div class="hc-empty">No resources in this group yet.</div>';
+            $("#rg-refresh")?.addEventListener("click", () => showResources(env, { force: true }));
+            return;
+        }
+
+        body.innerHTML =
+            head +
+            `<table class="rg-table"><thead><tr><th>Name</th><th>Location</th><th>State</th><th></th></tr></thead><tbody id="rg-tbody"></tbody></table>`;
+
+        const tbody = $("#rg-tbody");
+        const nameInput = $("#rg-filter-name");
+        const typeInput = $("#rg-filter-type");
+
+        function renderRows() {
+            const q = (nameInput.value || "").trim().toLowerCase();
+            const ty = typeInput.value || "";
+            const filtered = resources.filter(
+                (x) =>
+                    (!q || (x.name || "").toLowerCase().includes(q)) &&
+                    (!ty || x.type === ty),
+            );
+            $("#rg-shown").textContent = filtered.length;
+            tbody.innerHTML = filtered.length
+                ? filtered
+                      .map((x) => {
+                          const fullType = x.type || "";
+                          const portal = x.id ? portalBase + x.id + "/overview" : "";
+                          return `<tr>
                     <td title="${esc(fullType)}">${esc(x.name)}</td>
-                    <td><code title="${esc(fullType)}">${esc(fullType.replace(/^Microsoft\./, ""))}</code></td>
                     <td>${esc(x.location || "")}</td>
                     <td>${
                         x.provisioningState
@@ -205,26 +247,21 @@ async function showResources(env, { force } = {}) {
                             : ""
                     }</td>
                 </tr>`;
-            })
-            .join("");
-        const head = `<div style="margin-bottom:10px;font-size:12px;color:var(--s2c-muted)">
-            <strong>${esc(data.resourceGroup || "")}</strong>
-            · ${data.resources?.length || 0} resources
-            · <span class="badge gray">${esc(data.source || "")}</span>
-            ${data.location ? "· " + esc(data.location) : ""}
-            <button class="iconbtn" id="rg-refresh" style="float:right;padding:2px 8px">↻ refresh</button>
-        </div>`;
-        body.innerHTML = data.resources?.length
-            ? head +
-              `<table><thead><tr><th>Name</th><th>Type</th><th>Location</th><th>State</th><th></th></tr></thead><tbody>${rows}</tbody></table>`
-            : head + '<div class="hc-empty">No resources in this group yet.</div>';
+                      })
+                      .join("")
+                : `<tr><td colspan="4" class="hc-empty">No resources match the filter.</td></tr>`;
+            tbody.querySelectorAll(".rg-portal").forEach((b) =>
+                b.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    openExternal(b.dataset.uri);
+                }),
+            );
+        }
+
+        nameInput.addEventListener("input", renderRows);
+        typeInput.addEventListener("change", renderRows);
+        renderRows();
         $("#rg-refresh")?.addEventListener("click", () => showResources(env, { force: true }));
-        body.querySelectorAll(".rg-portal").forEach((b) =>
-            b.addEventListener("click", (e) => {
-                e.stopPropagation();
-                openExternal(b.dataset.uri);
-            }),
-        );
     } catch (e) {
         body.innerHTML = `<div class="err">${esc(e.message || e)}</div>`;
     }
