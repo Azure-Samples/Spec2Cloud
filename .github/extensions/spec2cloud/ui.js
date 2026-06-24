@@ -21,7 +21,7 @@ let detail = null; // { kind: 'env'|'resources'|'doc', env?, stage? }
 const STAGE_ICONS = {
     completed: "✓",
     running: "↻",
-    stopped: "▮▮",
+    stopped: `<svg viewBox="0 0 16 16" width="14" height="14"><path fill="currentColor" d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"/></svg>`,
     waiting: "?",
     pending: "•",
 };
@@ -739,8 +739,13 @@ function stageTip(stage) {
 
 function renderPipeline(s) {
     const loop = s.loop;
-    const running = loop.stages.some((x) => x.status === "running" || x.status === "waiting");
-    const pct = ((loop.completed + (running ? 0.5 : 0)) / loop.total) * 100;
+    // The current (non-completed) stage contributes half a step whether it is
+    // running, waiting, or stopped/idle — so the bar never shrinks when a stage
+    // flips from running to stopped.
+    const active = loop.stages.some((x) =>
+        x.status === "running" || x.status === "waiting" || x.status === "stopped",
+    );
+    const pct = ((loop.completed + (active ? 0.5 : 0)) / loop.total) * 100;
     $("#progress-fill").style.width = `${pct}%`;
 
     const pipe = $("#pipeline");
