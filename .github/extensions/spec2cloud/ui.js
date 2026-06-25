@@ -407,13 +407,13 @@ function foundrySectionHtml(label, section) {
     const items = section.items || [];
     const rows = items.length
         ? items
-              .map(
-                  (it) => `<li class="fdry-item">
-                    <span class="fdry-name" title="${esc(it.name)}">${esc(it.name)}</span>
-                    ${it.sub ? `<span class="fdry-sub" title="${esc(it.sub)}">${esc(it.sub)}</span>` : ""}
+              .map((it) => {
+                  const tip = [it.name, it.sub].filter(Boolean).join(" — ");
+                  return `<li class="fdry-item">
+                    <span class="fdry-name" title="${esc(tip)}">${esc(it.name)}</span>
                     ${it.portal ? `<button class="iconbtn fdry-portal" data-uri="${esc(it.portal)}" title="Open in Foundry portal" aria-label="Open ${esc(it.name)} in Foundry portal">↗</button>` : ""}
-                </li>`,
-              )
+                </li>`;
+              })
               .join("")
         : `<li class="fdry-empty">None</li>`;
     return `<div class="fdry-section">

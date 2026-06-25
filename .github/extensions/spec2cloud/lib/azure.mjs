@@ -44,7 +44,10 @@ async function viaSdk(subscriptionId, resourceGroup) {
     const credential = new AzureCliCredential();
     const client = new ResourceManagementClient(credential, subscriptionId);
     const resources = [];
-    for await (const r of client.resources.listByResourceGroup(resourceGroup)) {
+    const iter = client.resources.listByResourceGroup(resourceGroup, {
+        expand: "provisioningState,createdTime,changedTime",
+    });
+    for await (const r of iter) {
         resources.push(normalize(r));
     }
     let group = null;
