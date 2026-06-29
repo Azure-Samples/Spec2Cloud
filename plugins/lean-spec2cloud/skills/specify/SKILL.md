@@ -41,6 +41,7 @@ Natural-language description, optionally prefixed with a sub-command:
 - Copy `.github/skills/specify/resources/copilot-instructions.md` to `.github/copilot-instructions.md` if missing.
 - Create `./docs` folder if doesn't exist.
 - Create/update `./docs/spec.md` from `resources/spec-template.md`. The spec must be implementation-ready. For genuine unknowns: in interactive mode, ask the user directly; in non-interactive mode, make a best-judgment assumption. All `[NEEDS CLARIFICATION]` markers must be resolved before the spec is considered implementation-ready.
+- If the user wants to use AI agents, install the **Agentic Loop** skill with `gh skills install aiappsgbb/agentic-loop agentic-loop --agent github-copilot --scope project` (if not already installed) and run the skill to enhance the spec with agentic opinionated defaults.
 
 ## Report
 
