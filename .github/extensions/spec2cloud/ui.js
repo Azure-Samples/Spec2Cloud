@@ -264,7 +264,8 @@ function syncDetailButtons() {
     document.querySelectorAll(".stage").forEach((s) => {
         s.classList.toggle(
             "selected",
-            detail?.kind === "doc" && s.dataset.stage === detail.stage,
+            (detail?.kind === "doc" && s.dataset.stage === detail.stage) ||
+                (detail?.kind === "frontend" && s.dataset.stage === "deploy"),
         );
     });
 }
@@ -478,6 +479,69 @@ async function showDoc(stage, { silent } = {}) {
     }
 }
 
+// Embed the live frontend inside the details panel. Some hosts block framing
+// via X-Frame-Options / CSP frame-ancestors; the chrome offers a window/external
+// escape hatch and surfaces a hint if the frame fails to load.
+function showFrontend(uri, { force } = {}) {
+    if (!uri) return;
+    // Don't tear down and reload the iframe if we're already showing this URL.
+    if (!force && detail?.kind === "frontend" && detail.uri === uri) {
+        openDetails(`Frontend · ${selectedEnv || ""}`.trim());
+        return;
+    }
+    detail = { kind: "frontend", uri };
+    openDetails(`Frontend · ${selectedEnv || ""}`.trim());
+    syncDetailButtons();
+    const body = $("#details-body");
+    body.innerHTML = `
+        <div class="fe-browser">
+            <div class="fe-bar">
+                <button class="iconbtn" id="fe-reload" title="Reload">↻</button>
+                <a class="fe-url" id="fe-url" href="${esc(uri)}" target="_blank" rel="noopener noreferrer" title="${esc(uri)}">${esc(uri.replace(/^https?:\/\//, ""))}</a>
+                <button class="iconbtn" id="fe-window" title="Open in a separate tab in the Copilot app">⧉</button>
+                <button class="iconbtn" id="fe-external" title="Open in external browser">↗</button>
+                <button class="iconbtn" id="fe-fullscreen" title="Toggle full screen" aria-label="Toggle full screen">⛶</button>
+            </div>
+            <div class="fe-frame-wrap">
+                <iframe class="fe-frame" id="fe-frame" src="${esc(uri)}"
+                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"
+                    referrerpolicy="no-referrer"></iframe>
+                <div class="fe-blocked" id="fe-blocked" hidden>
+                    <p>This site may block embedding. Try opening it in a separate tab or an external browser.</p>
+                </div>
+            </div>
+        </div>`;
+    const frame = $("#fe-frame");
+    const blocked = $("#fe-blocked");
+    const browserEl = body.querySelector(".fe-browser");
+    let loaded = false;
+    frame.addEventListener("load", () => {
+        loaded = true;
+        blocked.hidden = true;
+    });
+    // If the frame hasn't fired load within a few seconds, it was likely
+    // refused (X-Frame-Options). Surface the fallback hint.
+    setTimeout(() => {
+        if (!loaded && detail?.kind === "frontend") blocked.hidden = false;
+    }, 4000);
+    $("#fe-reload")?.addEventListener("click", () => {
+        loaded = false;
+        blocked.hidden = true;
+        frame.src = uri;
+    });
+    $("#fe-window")?.addEventListener("click", (e) =>
+        openAppBrowser(uri, e.currentTarget),
+    );
+    $("#fe-external")?.addEventListener("click", () => openExternal(uri));
+    $("#fe-fullscreen")?.addEventListener("click", () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen?.();
+        } else {
+            browserEl?.requestFullscreen?.();
+        }
+    });
+}
+
 function refreshActiveDetail() {
     if (!detail) return;
     if (detail.kind === "env") showEnvFile(detail.env, { silent: true });
@@ -485,7 +549,8 @@ function refreshActiveDetail() {
     else if (detail.kind === "session") showSession({ silent: true });
     else if (detail.kind === "todos") showTodos({ silent: true });
     else if (detail.kind === "stat") renderStatDetail();
-    // resources are network-bound: refreshed manually.
+    // resources and frontend are network/iframe-bound: refreshed manually so
+    // the embedded page isn't reloaded on every state poll.
 }
 
 const TODO_BADGE = {
@@ -830,8 +895,7 @@ function frontendTipHtml(uri) {
         <p class="tip-frontend-label">Live frontend</p>
         <code class="tip-uri" title="${esc(uri)}">${esc(uri)}</code>
         <div class="tip-actions">
-            <button class="fe-btn fe-preview" data-uri="${esc(uri)}">Integrated browser</button>
-            <button class="fe-btn fe-ext" data-uri="${esc(uri)}">External window</button>
+            <button class="fe-btn fe-preview" data-uri="${esc(uri)}">Open preview</button>
         </div>
     </div>`;
 }
@@ -898,13 +962,7 @@ function renderPipeline(s) {
     pipe.querySelectorAll(".fe-preview").forEach((b) =>
         b.addEventListener("click", (e) => {
             e.stopPropagation();
-            openAppBrowser(b.dataset.uri, b);
-        }),
-    );
-    pipe.querySelectorAll(".fe-ext").forEach((b) =>
-        b.addEventListener("click", (e) => {
-            e.stopPropagation();
-            openExternal(b.dataset.uri);
+            showFrontend(b.dataset.uri);
         }),
     );
     syncDetailButtons();
@@ -942,7 +1000,15 @@ function autoOpenOnStageCompletion(s) {
                 justCompleted = st; // last in pipeline order = most advanced
             }
         }
-        if (justCompleted) showDoc(justCompleted.id);
+        if (justCompleted) {
+            if (justCompleted.id === "deploy") {
+                const uri = getFrontendUri();
+                if (uri) showFrontend(uri);
+                else showDoc(justCompleted.id);
+            } else {
+                showDoc(justCompleted.id);
+            }
+        }
     }
     prevStageStatus = cur;
 }
