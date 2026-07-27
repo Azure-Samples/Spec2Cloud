@@ -104,7 +104,7 @@
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
     "stars": 0,
-    "forks": 0,
+    "forks": 1,
     "services": [
       "Azure AI Foundry",
       "Azure Cosmos DB",
@@ -141,8 +141,8 @@
     ],
     "category": "App Modernization",
     "industry": "Education",
-    "stars": 0,
-    "forks": 0,
+    "stars": 1,
+    "forks": 3,
     "services": [
       "Azure App Service"
     ],
@@ -165,7 +165,8 @@
       "DotNet",
       "University"
     ],
-    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-dotnet-4to10-contosouniversity-spec2cloud/refs/heads/main/img/repo-banner.png"
+    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-dotnet-4to10-contosouniversity-spec2cloud/refs/heads/main/img/repo-banner.png",
+    "last-commit-date": "2026-03-31T09:20:41Z"
   },
   "emeaappgbb-appmodlab-java-8to21-assetsmanager-spec2cloud": {
     "title": "Assets Manager Java 8→21 Modernization with Spec2Cloud",
@@ -198,7 +199,8 @@
       "github-copilot",
       "cloud-migration"
     ],
-    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-java-8to21-AssetsManager-spec2cloud/refs/heads/main/img/repo-banner.png"
+    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-java-8to21-AssetsManager-spec2cloud/refs/heads/main/img/repo-banner.png",
+    "last-commit-date": "2026-04-16T15:22:52Z"
   },
   "emeaappgbb-appmodlab-node-16to22-hackmanager-spec2cloud": {
     "title": "HackManager Node 16→22 Modernization with Spec2Cloud",
@@ -234,6 +236,7 @@
       "ESM",
       "Hackathon"
     ],
-    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-node-16to22-HackManager-spec2cloud/refs/heads/main/img/repo-banner.png"
+    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-node-16to22-HackManager-spec2cloud/refs/heads/main/img/repo-banner.png",
+    "last-commit-date": "2026-04-16T19:34:30Z"
   }
 }
