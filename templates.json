@@ -1,37 +1,4 @@
 {
-  "emeaappgbb-spec2cloud-marketing-agents": {
-    "title": "Marketing agents",
-    "description": "Description",
-    "repo": "https://github.com/EmeaAppGbb/spec2cloud-marketing-agents",
-    "authors": [
-      "kostapetan"
-    ],
-    "category": "AI Apps & Agents",
-    "industry": "Cross-Industry",
-    "stars": 1,
-    "forks": 1,
-    "services": [
-      "Microsoft Foundry",
-      "Azure Container Apps",
-      "Azure CosmosDB"
-    ],
-    "languages": [
-      ".NET",
-      "TypeScript",
-      "Bicep"
-    ],
-    "frameworks": [
-      "Microsoft Agent Framework",
-      "Aspire",
-      "Next.js",
-      "CopilotKit",
-      "AG-UI"
-    ],
-    "extensions": [],
-    "tags": [],
-    "version": "1.0.0",
-    "last-commit-date": "2025-12-16T20:27:32Z"
-  },
   "emeaappgbb-spec2cloud-weather-agent": {
     "title": "Weather Agent",
     "description": "AI App that shows dummy weather information using AI Foundry, Microsoft Agent Framework, MCP tools and Container Apps",
@@ -42,7 +9,7 @@
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
     "stars": 0,
-    "forks": 1,
+    "forks": 0,
     "services": [
       "Azure AI Foundry",
       "Azure Container Apps",
@@ -60,39 +27,7 @@
       "MCP",
       "AI-Gateway"
     ],
-    "thumbnail": "architecture.png",
-    "last-commit-date": "2026-01-15T09:40:51Z"
-  },
-  "renatosgr-specpets": {
-    "title": "Octopets - Pet Sitter MarketPlace Platform",
-    "description": "A pet sitter marketplace platform that enables pet owners to search for and book pet sitters. Technically follows .NET Aspire orchestration with ASP.NET Core backend, React frontend, and multi-agent AI integration for intelligent recommendations.",
-    "repo": "https://github.com/RenatoSGR/specPets",
-    "authors": [
-      "RenatoSGR"
-    ],
-    "category": "AI Apps & Agents",
-    "industry": "Cross-Industry",
-    "stars": 7,
-    "forks": 2,
-    "services": [
-      "Microsoft Foundry",
-      "Azure Container Apps"
-    ],
-    "languages": [
-      ".NET"
-    ],
-    "frameworks": [
-      "Microsoft Agent Framework",
-      "React"
-    ],
-    "extensions": [],
-    "tags": [
-      "🌱 Spec Kit"
-    ],
-    "thumbnail": "thumbnail.png",
-    "video": "https://github.com/user-attachments/assets/891b2ec6-40e6-4ea3-95ca-e40a9bd2e6a2",
-    "version": "1.0.0",
-    "last-commit-date": "2025-11-19T12:29:38Z"
+    "thumbnail": "architecture.png"
   },
   "emeaappgbb-spec2cloud-call-center-agents": {
     "title": "Call Center Agents",
@@ -129,8 +64,7 @@
     ],
     "thumbnail": "docs/media/customer-support.png",
     "video": "docs/media/call-center-demo.mp4",
-    "version": 0.1,
-    "last-commit-date": "2026-01-16T13:03:58Z"
+    "version": 0.1
   },
   "emeaappgbb-appmodlab-dotnet-4to10-contosouniversity-spec2cloud": {
     "title": "Contoso University - .NET 4.8 → 10 Modernization with Spec2Cloud",
@@ -141,8 +75,8 @@
     ],
     "category": "App Modernization",
     "industry": "Education",
-    "stars": 1,
-    "forks": 3,
+    "stars": 0,
+    "forks": 0,
     "services": [
       "Azure App Service"
     ],
@@ -165,8 +99,7 @@
       "DotNet",
       "University"
     ],
-    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-dotnet-4to10-contosouniversity-spec2cloud/refs/heads/main/img/repo-banner.png",
-    "last-commit-date": "2026-03-31T09:20:41Z"
+    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-dotnet-4to10-contosouniversity-spec2cloud/refs/heads/main/img/repo-banner.png"
   },
   "emeaappgbb-appmodlab-java-8to21-assetsmanager-spec2cloud": {
     "title": "Assets Manager Java 8→21 Modernization with Spec2Cloud",
@@ -199,44 +132,6 @@
       "github-copilot",
       "cloud-migration"
     ],
-    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-java-8to21-AssetsManager-spec2cloud/refs/heads/main/img/repo-banner.png",
-    "last-commit-date": "2026-04-16T15:22:52Z"
-  },
-  "emeaappgbb-appmodlab-node-16to22-hackmanager-spec2cloud": {
-    "title": "HackManager Node 16→22 Modernization with Spec2Cloud",
-    "description": "Modernize a legacy Node.js 16 hackathon management app to Node.js 22 using Spec2Cloud and GitHub Copilot, then deploy to Azure.",
-    "repo": "https://github.com/EmeaAppGbb/AppModLab-node-16to22-HackManager-spec2cloud",
-    "authors": [
-      "marconsilva"
-    ],
-    "category": "App Modernization",
-    "industry": "Cross-Industry",
-    "stars": 0,
-    "forks": 0,
-    "services": [
-      "Azure App Service"
-    ],
-    "languages": [
-      "JavaScript"
-    ],
-    "frameworks": [
-      "Express"
-    ],
-    "extensions": [
-      "ms-windows-ai-studio.windows-ai-studio"
-    ],
-    "tags": [
-      "Node.js",
-      "Spec2Cloud",
-      "Spec-Driven Development",
-      "GitHub Copilot",
-      "Modernization",
-      "Node 16",
-      "Node 22",
-      "ESM",
-      "Hackathon"
-    ],
-    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-node-16to22-HackManager-spec2cloud/refs/heads/main/img/repo-banner.png",
-    "last-commit-date": "2026-04-16T19:34:30Z"
+    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-java-8to21-AssetsManager-spec2cloud/refs/heads/main/img/repo-banner.png"
   }
 }
