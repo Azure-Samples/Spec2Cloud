@@ -9,7 +9,7 @@
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
     "stars": 0,
-    "forks": 0,
+    "forks": 1,
     "services": [
       "Azure AI Foundry",
       "Azure Container Apps",
@@ -27,7 +27,8 @@
       "MCP",
       "AI-Gateway"
     ],
-    "thumbnail": "architecture.png"
+    "thumbnail": "architecture.png",
+    "last-commit-date": "2026-01-15T09:40:51Z"
   },
   "emeaappgbb-spec2cloud-call-center-agents": {
     "title": "Call Center Agents",
@@ -39,7 +40,7 @@
     "category": "AI Apps & Agents",
     "industry": "Cross-Industry",
     "stars": 0,
-    "forks": 0,
+    "forks": 1,
     "services": [
       "Azure AI Foundry",
       "Azure Cosmos DB",
@@ -64,7 +65,8 @@
     ],
     "thumbnail": "docs/media/customer-support.png",
     "video": "docs/media/call-center-demo.mp4",
-    "version": 0.1
+    "version": 0.1,
+    "last-commit-date": "2026-01-16T13:03:58Z"
   },
   "emeaappgbb-appmodlab-dotnet-4to10-contosouniversity-spec2cloud": {
     "title": "Contoso University - .NET 4.8 → 10 Modernization with Spec2Cloud",
@@ -75,8 +77,8 @@
     ],
     "category": "App Modernization",
     "industry": "Education",
-    "stars": 0,
-    "forks": 0,
+    "stars": 1,
+    "forks": 3,
     "services": [
       "Azure App Service"
     ],
@@ -99,7 +101,8 @@
       "DotNet",
       "University"
     ],
-    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-dotnet-4to10-contosouniversity-spec2cloud/refs/heads/main/img/repo-banner.png"
+    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-dotnet-4to10-contosouniversity-spec2cloud/refs/heads/main/img/repo-banner.png",
+    "last-commit-date": "2026-03-31T09:20:41Z"
   },
   "emeaappgbb-appmodlab-java-8to21-assetsmanager-spec2cloud": {
     "title": "Assets Manager Java 8→21 Modernization with Spec2Cloud",
@@ -132,6 +135,44 @@
       "github-copilot",
       "cloud-migration"
     ],
-    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-java-8to21-AssetsManager-spec2cloud/refs/heads/main/img/repo-banner.png"
+    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-java-8to21-AssetsManager-spec2cloud/refs/heads/main/img/repo-banner.png",
+    "last-commit-date": "2026-04-16T15:22:52Z"
+  },
+  "emeaappgbb-appmodlab-node-16to22-hackmanager-spec2cloud": {
+    "title": "HackManager Node 16→22 Modernization with Spec2Cloud",
+    "description": "Modernize a legacy Node.js 16 hackathon management app to Node.js 22 using Spec2Cloud and GitHub Copilot, then deploy to Azure.",
+    "repo": "https://github.com/EmeaAppGbb/AppModLab-node-16to22-HackManager-spec2cloud",
+    "authors": [
+      "marconsilva"
+    ],
+    "category": "App Modernization",
+    "industry": "Cross-Industry",
+    "stars": 0,
+    "forks": 0,
+    "services": [
+      "Azure App Service"
+    ],
+    "languages": [
+      "JavaScript"
+    ],
+    "frameworks": [
+      "Express"
+    ],
+    "extensions": [
+      "ms-windows-ai-studio.windows-ai-studio"
+    ],
+    "tags": [
+      "Node.js",
+      "Spec2Cloud",
+      "Spec-Driven Development",
+      "GitHub Copilot",
+      "Modernization",
+      "Node 16",
+      "Node 22",
+      "ESM",
+      "Hackathon"
+    ],
+    "thumbnail": "https://raw.githubusercontent.com/EmeaAppGbb/AppModLab-node-16to22-HackManager-spec2cloud/refs/heads/main/img/repo-banner.png",
+    "last-commit-date": "2026-04-16T19:34:30Z"
   }
 }
