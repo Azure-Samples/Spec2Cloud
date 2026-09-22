@@ -34,6 +34,11 @@ function getBranch(repoUrl) {
 
 // Function to get repository information (last commit date and stars)
 function getRepoInfo(repoPath, branch = 'main') {
+  // Validate branch name to prevent command injection via shell metacharacters
+  if (!/^[a-zA-Z0-9/_.\-]+$/.test(branch)) {
+    console.error(`Skipping repo info: invalid branch name "${branch}"`);
+    return { lastCommitDate: null, stars: 0, forks: 0 };
+  }
   const info = {
     lastCommitDate: null,
     stars: 0,
