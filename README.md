@@ -90,6 +90,31 @@ Use the Lean Toolkit when you want a fast, low-overhead workflow in Copilot.
 
 ---
 
+### 🤖 Use with Claude Code
+
+The `lean` and `speckit` plugins also install in [Claude Code](https://claude.com/claude-code). The skills are the same source as the Copilot plugins — only the manifests differ — so the workflow is identical.
+
+1. **Add the marketplace and install a plugin:**
+
+   ```text
+   /plugin marketplace add Azure-Samples/Spec2Cloud
+   /plugin install lean@Spec2Cloud
+   ```
+
+   Swap `lean` for `speckit` to install the fuller Spec Kit workflow instead.
+
+2. **Run the stages** (same prerequisites as the Lean Toolkit above — `az`, `azd`, `bicep`, and `azd auth login`):
+
+   ```text
+   /lean:specify Build a todo web app with a C# backend deployed on App Service, using Cosmos DB for NoSQL as the data persistence layer.
+   /lean:plan
+   /lean:implement
+   /lean:verify
+   /lean:deploy
+   ```
+
+---
+
 ### 🔧 VS Code Extension
 
 Use the Spec2Cloud Toolkit extension to monitor spec-driven workflow progress and scaffold projects from templates directly in VS Code. It complements Copilot CLI workflows with a guided visual experience.

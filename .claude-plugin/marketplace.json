@@ -1,0 +1,42 @@
+{
+  "name": "Spec2Cloud",
+  "owner": {
+    "name": "Azure Samples"
+  },
+  "metadata": {
+    "description": "Spec2Cloud marketplace plugins for Claude Code.",
+    "version": "1.2.0"
+  },
+  "plugins": [
+    {
+      "name": "speckit",
+      "source": "./plugins/speckit-spec2cloud",
+      "description": "Spec-driven workflow for shipping to Azure with Spec-Kit: constitution → specify → clarify → plan → tasks → implement → verify → deploy.",
+      "version": "1.2.0",
+      "homepage": "https://github.com/Azure-Samples/Spec2Cloud",
+      "keywords": [
+        "azure",
+        "cloud",
+        "infrastructure",
+        "deployment",
+        "microsoft",
+        "devops"
+      ]
+    },
+    {
+      "name": "lean",
+      "source": "./plugins/lean-spec2cloud",
+      "description": "Lean spec-driven workflow for shipping to Azure: specify → plan → implement → verify → deploy.",
+      "version": "1.0.0",
+      "homepage": "https://github.com/Azure-Samples/Spec2Cloud",
+      "keywords": [
+        "azure",
+        "cloud",
+        "infrastructure",
+        "deployment",
+        "microsoft",
+        "devops"
+      ]
+    }
+  ]
+}
